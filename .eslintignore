@@ -1,0 +1,14 @@
+// .eslintignore
+
+node_modules
+dist
+
+.eslintrc.cjs
+
+# IDE - VSCode
+.vscode/*
+
+# System Files
+.DS_Store
+Thumbs.db
+{"mode":"full","isActive":false}
