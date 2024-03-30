@@ -125,26 +125,31 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
 
   const handleIntegersLengthChange = e => {
     const value = e.target.value.trim()
+
+    const setErrorForValue = errorMessage => {
+      setError({ ...error, integersLength: errorMessage })
+    }
+
+    setIntegersLength(value)
+
     if (value === '') {
-      setIntegersLength('')
-      setError({ ...error, integersLength: 'Length is required' })
+      setErrorForValue('Length is required')
     } else {
       const parsedValue = parseInt(value)
-      if (parsedValue < 1 || isNaN(parsedValue)) {
-        setError({
-          ...error,
-          integersLength: 'Please enter a valid positive integer'
-        })
+      if (parsedValue === 0) {
+        setErrorForValue('Length must be greater than 0')
+      } else if (parsedValue < 0 || isNaN(parsedValue)) {
+        setErrorForValue('Please enter a valid positive integer')
       } else {
-        setIntegersLength(parsedValue)
         const min = parseInt(minValue)
         const max = parseInt(maxValue)
         const desiredLength = parsedValue
-        const isValid = isValidIntegerLength(min, max, desiredLength)
-        if (isValid !== null) {
-          setError({ ...error, integersLength: isValid })
+        const validationError = isValidIntegerLength(min, max, desiredLength)
+        if (validationError !== null) {
+          setErrorForValue(validationError)
         } else {
-          setError({ ...error, integersLength: '' })
+          setIntegersLength(parsedValue)
+          setErrorForValue('')
         }
       }
     }
@@ -163,7 +168,9 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
       setErrorForValue('Count is required')
     } else {
       const parsedValue = parseInt(value)
-      if (parsedValue < 1 || isNaN(parsedValue)) {
+      if (parsedValue === 0) {
+        setErrorForValue('Count must be greater than 0')
+      } else if (parsedValue < 0 || isNaN(parsedValue)) {
         setErrorForValue('Please enter a valid positive integer')
       } else if (parsedValue > 100000) {
         setErrorForValue('Value must not exceed 100,000')
@@ -280,7 +287,7 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
             <span className='text-red-500'>*</span>
           </label>
           <input
-            type='text'
+            type='number'
             placeholder='Length'
             value={integersLength}
             onChange={handleIntegersLengthChange}
@@ -298,7 +305,7 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
             <span className='text-red-500'>*</span>
           </label>
           <input
-            type='text'
+            type='number'
             placeholder='Count'
             value={countOfIntegers}
             onChange={handleCountOfIntegersChange}

@@ -1,11 +1,20 @@
 const people = [
   {
     name: 'Ankit Raj',
-    role: 'Founder / CEO',
+    role: 'Founder',
     imageUrl:
       'https://media.licdn.com/dms/image/D4D03AQFEkhV62nbUPQ/profile-displayphoto-shrink_800_800/0/1683541365867?e=1715817600&v=beta&t=vjZI9VtGs-gmWv-FZuQQ3-KxWIf1Noi-5VerLQU3FeU'
+  },
+  {
+    name: 'Aaditya Bakliwal',
+    role: 'Backend Developer',
+    imageUrl: 'https://avatars.githubusercontent.com/u/56169571?v=4'
+  },
+  {
+    name: 'Vivek Singh',
+    role: 'Backend Developer',
+    imageUrl: 'https://avatars.githubusercontent.com/u/56169571?v=4'
   }
-  // More people...
 ]
 
 export default function Team() {
@@ -17,7 +26,7 @@ export default function Team() {
             Meet our leadership
           </h2>
           <p className='mt-6 text-lg leading-8 text-gray-600'>
-            Introducing the Minds Behind Testcase Generator
+            Introducing the Minds Behind CodeLens.
           </p>
         </div>
         <ul
