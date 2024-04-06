@@ -66,7 +66,9 @@ const Modal = ({ isOpen, onClose, links, data }) => {
           {title === 'Integer' && (
             <IntegerGeneratorModal isOpen={isOpen} data={data} />
           )}
-          {title === 'Array' && <ArrayGeneratorModal isOpen={isOpen} />}
+          {title === 'Array' && (
+            <ArrayGeneratorModal isOpen={isOpen} data={data} />
+          )}
           {title === 'String' && <StringGeneratorModal isOpen={isOpen} />}
         </div>
       </div>

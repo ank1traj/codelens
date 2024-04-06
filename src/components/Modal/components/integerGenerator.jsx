@@ -122,6 +122,7 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
     }
     return null
   }
+
   const handleIntegersLengthChange = e => {
     const value = e.target.value.trim()
 
@@ -172,7 +173,7 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
       } else if (parsedValue < 1 || isNaN(parsedValue)) {
         setErrorForValue('Please enter a valid positive integer')
       } else if (parsedValue > 100000) {
-        setErrorForValue('Value must not exceed 100,000')
+        setErrorForValue('Count must not exceed 100,000')
       } else {
         setErrorForValue('')
       }
@@ -197,8 +198,6 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
     }
 
     try {
-      const capitalizedValue = 'Integer'
-
       const responseData = await ApiRequest(
         `generate${type}`, // Use capitalizedValue in the request
         'POST',
@@ -206,7 +205,7 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
       )
 
       // Handle the response data as needed
-      console.log(`Received data for ${capitalizedValue}:`, responseData)
+      console.log(`Received data for ${type}:`, responseData)
       setGeneratedData(responseData)
     } catch (error) {
       // Error handling
