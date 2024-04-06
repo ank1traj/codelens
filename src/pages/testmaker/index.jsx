@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 
 import LogRocket from 'logrocket'
-import { useUser } from '@clerk/nextjs'
 import { v4 as uuidv4 } from 'uuid'
+import { useUser } from '@clerk/clerk-react'
 
 import TestHomePage from '@/components/codeLens/testcase/homePage'
 import Hero from '@/components/codeLens/testcase/hero'
