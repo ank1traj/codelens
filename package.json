@@ -25,6 +25,7 @@
     "@sentry/vite-plugin": "^2.16.0",
     "@vercel/analytics": "^1.2.2",
     "husky": "^9.0.11",
+    "logrocket": "^8.1.0",
     "prettier": "^3.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
