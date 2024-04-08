@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 
 import LogRocket from 'logrocket'
-import { v4 as uuidv4 } from 'uuid'
 import { useUser } from '@clerk/clerk-react'
 
 import TestHomePage from '@/components/codeLens/testcase/homePage'
@@ -12,19 +11,17 @@ const TestMaker = () => {
 
   useEffect(() => {
     const initializeLogRocket = () => {
-      LogRocket.init(import.meta.env.VITE_LOGROCKET_APP_ID)
+      if (import.meta.env.ENVIRONMENT !== 'development') {
+        LogRocket.init(import.meta.env.VITE_LOGROCKET_APP_ID)
+      }
     }
 
     const identifyLogRocket = () => {
-      const logRocketID = isSignedIn
-        ? user?.primaryEmailAddress?.emailAddress || `guest-${uuidv4()}`
-        : uuidv4()
+      const logRocketID = user?.primaryEmailAddress?.emailAddress
 
       LogRocket.identify(logRocketID, {
-        name: isSignedIn ? user?.fullName || 'Guest' : 'Anonymous User',
-        email: isSignedIn
-          ? user?.primaryEmailAddress?.emailAddress || 'Anonymous User'
-          : uuidv4()
+        name: user?.fullName,
+        email: user?.primaryEmailAddress?.emailAddress
       })
     }
 
