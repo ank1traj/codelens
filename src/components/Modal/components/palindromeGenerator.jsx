@@ -7,7 +7,7 @@ import ButtonGroup from '@/components/buttons'
 import InputField from '@/components/inputs'
 import MultiSelectDropdown from '@/components/multiSelectDropdown'
 
-const ArrayGeneratorModal = ({ isOpen, data }) => {
+const PalindromeGeneratorModal = ({ isOpen, data }) => {
     const initialState = {
         minValue: -100,
         maxValue: 1,
@@ -19,12 +19,12 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
             arraySize: '',
             countOfArray: ''
         },
+        isFloatChecked: false,
+        isRandomSizeChecked: false,
+        isStringChecked: false,
         isLengthChecked: false,
         isCountChecked: false,
-        isFloatChecked: false,
-        selectedNumberOptions: [],
-        selectedArrayOptions: [],
-        selectedNumberType: []
+        selectedCharOptions: []
     }
 
     const [minValue, setMinValue] = useState(initialState.minValue)
@@ -38,14 +38,8 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
     const [isCountChecked, setIsCountChecked] = useState(
         initialState.isCountChecked
     )
-    const [selectedNumberOptions, setSelectedNumberOptions] = useState(
-        initialState.selectedNumberOptions
-    )
-    const [selectedArrayOptions, setSelectedArrayOptions] = useState(
-        initialState.selectedArrayOptions
-    )
-    const [selectedNumberType, setSelectedNumberType] = useState(
-        initialState.selectedNumberType
+    const [isStringChecked, setIsStringChecked] = useState(
+        initialState.isStringChecked
     )
 
     const handleIsLengthChecked = () => {
@@ -56,16 +50,14 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
         setIsCountChecked(!isCountChecked)
     }
 
-    const handleNumberOptionsChange = selectedNumberOptions => {
-        setSelectedNumberOptions(selectedNumberOptions)
-        // You can perform any additional logic here with the selected options
+    const handleIsStringChecked = () => {
+        setIsStringChecked(!isStringChecked)
     }
-    const handleArrayOptionsChange = selectedArrayOptions => {
-        setSelectedArrayOptions(selectedArrayOptions)
-        // You can perform any additional logic here with the selected options
-    }
-    const handleNumberTypeChange = selectedNumberType => {
-        setSelectedNumberType(selectedNumberType)
+
+    const [selectedCharOptions, setSelectedCharOptions] = useState([])
+
+    const handlePalindromeTypeChange = selectedOptions => {
+        setSelectedCharOptions(selectedOptions)
         // You can perform any additional logic here with the selected options
     }
 
@@ -155,12 +147,9 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
         count: countOfArray,
         show_length: isLengthChecked,
         show_count: isCountChecked,
-        number_options: selectedNumberOptions,
-        array_options: selectedArrayOptions,
-        number_type: selectedNumberType,
-        type: type
+        type: type,
+        charOptions: selectedCharOptions
     }
-
 
     const handleGenerate = async () => {
         const setGeneratedData = data => {
@@ -197,9 +186,8 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
         setError(initialState.error)
         setIsLengthChecked(initialState.isLengthChecked)
         setIsCountChecked(initialState.isCountChecked)
-        setSelectedNumberOptions(initialState.selectedNumberOptions)
-        setSelectedArrayOptions(initialState.selectedArrayOptions)
-        setSelectedNumberType(initialState.selectedNumberType)
+        setIsStringChecked(initialState.isStringChecked)
+        setSelectedCharOptions(initialState.selectedCharOptions)
     }
 
     const handleDownload = () => {
@@ -245,31 +233,33 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
         }
     ]
 
-    const numberOptions = ['Any', 'Even', 'Odd', 'Prime']
-    const arrayOptions = ['Random Size', 'Float Value', 'Distinct', 'Negative']
-    const numberType = ['Increasing', 'Decreasing', 'Random']
+    const charOptions = ['a-z', 'A-Z', '0-9', 'Special Chars']
 
     return (
         <div className='modal'>
             <div className='grid grid-cols-1 sm:grid-cols-4 gap-4'>
+                {!isStringChecked ? (
+                    <InputField
+                        label='Min value'
+                        value={minValue}
+                        onChange={handleMinValueChange}
+                        placeholder='Minimum'
+                        error={error.minValue}
+                        isRequired={true}
+                    />
+                ) : null}
+                {!isStringChecked ? (
+                    <InputField
+                        label='Max Value'
+                        value={maxValue}
+                        onChange={handleMaxValueChange}
+                        placeholder='Maximum'
+                        error={error.maxValue}
+                        isRequired={true}
+                    />
+                ) : null}
                 <InputField
-                    label='Min value'
-                    value={minValue}
-                    onChange={handleMinValueChange}
-                    placeholder='Minimum'
-                    error={error.minValue}
-                    isRequired={true}
-                />
-                <InputField
-                    label='Max Value'
-                    value={maxValue}
-                    onChange={handleMaxValueChange}
-                    placeholder='Maximum'
-                    error={error.maxValue}
-                    isRequired={true}
-                />
-                <InputField
-                    label="Array's Size"
+                    label="Palindrome's Size"
                     value={arraySize}
                     onChange={handleArraySizeChange}
                     placeholder='Size'
@@ -277,7 +267,7 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
                     isRequired={true}
                 />
                 <InputField
-                    label='Count of Arrays'
+                    label='Count of Palindrome'
                     value={countOfArray}
                     onChange={handleCountOfArrayChange}
                     placeholder='Count'
@@ -296,28 +286,23 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
                     onChange={handleIsLengthChecked}
                     rightLabel='Show count'
                 />
-            </div>
-            <div className='grid sm:grid-cols-3 text-sm font-sm'>
-                <MultiSelectDropdown
-                    heading='Select Number Options'
-                    options={numberOptions}
-                    onChange={handleNumberOptionsChange}
-                    value={selectedNumberOptions}
-                />
-                <MultiSelectDropdown
-                    heading='Select Array type'
-                    options={arrayOptions}
-                    onChange={handleArrayOptionsChange}
-                    value={selectedArrayOptions}
-                />
-                <MultiSelectDropdown
-                    heading='Select Number type'
-                    options={numberType}
-                    onChange={handleNumberTypeChange}
-                    value={selectedNumberType}
+                <ToggleSwitch
+                    checked={isStringChecked}
+                    onChange={handleIsStringChecked}
+                    rightLabel='String'
+                    leftLabel='Number'
                 />
             </div>
-
+            {isStringChecked ? (
+                <div className='grid sm:grid-cols-3 text-sm font-sm'>
+                    <MultiSelectDropdown
+                        heading='Select Char Options'
+                        options={charOptions}
+                        onChange={handlePalindromeTypeChange}
+                        value={selectedCharOptions}
+                    />
+                </div>
+            ) : null}
             <div>
                 <ButtonGroup buttons={buttons} />
             </div>
@@ -325,9 +310,9 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
     )
 }
 
-ArrayGeneratorModal.propTypes = {
+PalindromeGeneratorModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     data: PropTypes.object.isRequired
 }
 
-export default ArrayGeneratorModal
+export default PalindromeGeneratorModal

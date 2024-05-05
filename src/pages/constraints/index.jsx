@@ -3,10 +3,10 @@ import { useEffect } from 'react'
 import LogRocket from 'logrocket'
 import { useUser } from '@clerk/clerk-react'
 
-import TestHomePage from '@/components/codeLens/testcase/homePage'
-import Hero from '@/components/codeLens/testcase/hero'
+// import TestHomePage from '@/components/codeLens/testcase/homePage'
+import Hero from '@/components/codeLens/constraints/hero'
 
-const TestMaker = () => {
+const Constraints = () => {
     const { isSignedIn, user } = useUser()
 
     useEffect(() => {
@@ -34,9 +34,9 @@ const TestMaker = () => {
     return (
         <>
             <Hero />
-            <TestHomePage />
+            {/* <TestHomePage /> */}
         </>
     )
 }
 
-export default TestMaker
+export default Constraints

@@ -4,21 +4,21 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    sentryVitePlugin({
-      org: 'ankitraj',
-      project: 'codelens'
-    })
-  ],
+    plugins: [
+        react(),
+        sentryVitePlugin({
+            org: 'ankitraj',
+            project: 'codelens'
+        })
+    ],
 
-  resolve: {
-    alias: {
-      '@': new URL('./src', import.meta.url).pathname
+    resolve: {
+        alias: {
+            '@': new URL('./src', import.meta.url).pathname
+        }
+    },
+
+    build: {
+        sourcemap: true
     }
-  },
-
-  build: {
-    sourcemap: true
-  }
 })

@@ -2,417 +2,321 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import ApiRequest from '@/components/api'
+import ToggleSwitch from '@/components/checkbox'
+import ButtonGroup from '@/components/buttons'
+import InputField from '@/components/inputs'
 
 const IntegerGeneratorModal = ({ isOpen, data }) => {
-  const initialState = {
-    minValue: -100,
-    maxValue: 1,
-    numberOfIntegers: 1,
-    integersLength: 1,
-    error: {
-      minValue: '',
-      maxValue: '',
-      numberOfIntegers: '',
-      integersLength: ''
-    },
-    isLengthChecked: false,
-    isNumberChecked: false
-  }
-
-  const [minValue, setMinValue] = useState(initialState.minValue)
-  const [maxValue, setMaxValue] = useState(initialState.maxValue)
-  const [countOfIntegers, setCountOfIntegers] = useState(
-    initialState.numberOfIntegers
-  )
-  const [integersLength, setIntegersLength] = useState(
-    initialState.integersLength
-  )
-  const [error, setError] = useState(initialState.error)
-  const [isLengthChecked, setIsLengthChecked] = useState(
-    initialState.isLengthChecked
-  )
-  const [isCountChecked, setIsCountChecked] = useState(
-    initialState.isNumberChecked
-  )
-
-  const handleIsLengthChecked = () => {
-    setIsLengthChecked(!isLengthChecked)
-  }
-
-  const handleIsNumberChecked = () => {
-    setIsCountChecked(!isCountChecked)
-  }
-
-  const handleMinValueChange = e => {
-    const value = e.target.value.trim()
-
-    const setErrorForValue = errorMessage => {
-      setError({ ...error, minValue: errorMessage })
+    const initialState = {
+        minValue: -100,
+        maxValue: 1,
+        countOfIntegers: 1,
+        integersLength: 1,
+        error: {
+            minValue: '',
+            maxValue: '',
+            countOfIntegers: '',
+            integersLength: ''
+        },
+        isLengthChecked: false,
+        isCountChecked: false
     }
 
-    setMinValue(value)
+    const [minValue, setMinValue] = useState(initialState.minValue)
+    const [maxValue, setMaxValue] = useState(initialState.maxValue)
+    const [countOfIntegers, setCountOfIntegers] = useState(
+        initialState.countOfIntegers
+    )
+    const [integersLength, setIntegersLength] = useState(
+        initialState.integersLength
+    )
+    const [error, setError] = useState(initialState.error)
+    const [isLengthChecked, setIsLengthChecked] = useState(
+        initialState.isLengthChecked
+    )
+    const [isCountChecked, setIsCountChecked] = useState(
+        initialState.isCountChecked
+    )
 
-    if (value === '') {
-      setErrorForValue('Min Value is required')
-    } else {
-      const parsedValue = parseInt(value)
-      if (!isNaN(parsedValue)) {
-        if (Math.abs(parsedValue) > 100000) {
-          setErrorForValue('Value cannot exceed 100,000')
-        } else if (parsedValue > maxValue) {
-          setErrorForValue('Min value must be less than or equal to max value')
+    const handleIsLengthChecked = () => {
+        setIsLengthChecked(!isLengthChecked)
+    }
+
+    const handleIsCountChecked = () => {
+        setIsCountChecked(!isCountChecked)
+    }
+
+    const handleChange = (value, setter, setErrorForValue, errorMessageFn) => {
+        const numericValue = parseInt(value, 10)
+        setter(numericValue)
+        if (value === '') {
+            setErrorForValue('Value is required')
         } else {
-          setErrorForValue('')
+            const parsedValue = parseInt(value)
+            if (!isNaN(parsedValue)) {
+                if (Math.abs(parsedValue) > 100000) {
+                    setErrorForValue('Value cannot exceed 100,000')
+                } else {
+                    const errorMessage = errorMessageFn(parsedValue)
+                    setErrorForValue(errorMessage || '') // Set error message to empty string if valid
+                }
+            } else {
+                setErrorForValue('Please enter a valid integer')
+            }
         }
-      } else {
-        setErrorForValue('Please enter a valid integer')
-      }
-    }
-  }
-
-  const handleMaxValueChange = e => {
-    const value = e.target.value.trim()
-
-    const setErrorForValue = errorMessage => {
-      setError({ ...error, maxValue: errorMessage })
     }
 
-    setMaxValue(value)
+    const handleMinValueChange = e =>
+        handleChange(
+            e.target.value.trim(),
+            setMinValue,
+            errorMessage => setError({ ...error, minValue: errorMessage }),
+            value =>
+                value === ''
+                    ? ''
+                    : value > maxValue
+                      ? 'Min value must be less than or equal to max value'
+                      : ''
+        )
 
-    if (value === '') {
-      setErrorForValue('Max Value is required')
-    } else {
-      const parsedValue = parseInt(value)
-      if (!isNaN(parsedValue)) {
-        if (Math.abs(parsedValue) > 100000) {
-          setErrorForValue('Value cannot exceed 100,000')
-        } else if (parsedValue < minValue) {
-          setErrorForValue(
-            'Max value must be greater than or equal to min value'
-          )
+    const handleMaxValueChange = e =>
+        handleChange(
+            e.target.value.trim(),
+            setMaxValue,
+            errorMessage => setError({ ...error, maxValue: errorMessage }),
+            value =>
+                value === ''
+                    ? ''
+                    : value < minValue
+                      ? 'Max value must be greater than or equal to min value'
+                      : ''
+        )
+
+    const isValidIntegerLength = (minValue, maxValue, desiredLength) => {
+        const countIntegers = num => {
+            return num.toString().replace('-', '').length
+        }
+
+        const minLengthValue = countIntegers(minValue)
+        const maxLengthValue = countIntegers(maxValue)
+
+        if (minValue < 0 && maxValue > 0) {
+            if (
+                desiredLength > minLengthValue &&
+                desiredLength > maxLengthValue
+            ) {
+                return 'Desired length is not valid for the given range'
+            }
+        } else if (minValue < 0 || maxValue < 0) {
+            if (
+                desiredLength > minLengthValue ||
+                desiredLength < maxLengthValue
+            ) {
+                return 'Desired length is not valid for the given range'
+            }
         } else {
-          setErrorForValue('')
+            if (
+                desiredLength < minLengthValue ||
+                desiredLength > maxLengthValue
+            ) {
+                return 'Desired length is not valid for the given range'
+            }
         }
-      } else {
-        setErrorForValue('Please enter a valid integer')
-      }
-    }
-  }
-
-  const isValidIntegerLength = (minValue, maxValue, desiredLength) => {
-    const countIntegers = num => {
-      return num.toString().replace('-', '').length
+        return null
     }
 
-    const minLengthValue = countIntegers(minValue)
-    const maxLengthValue = countIntegers(maxValue)
-
-    if (minValue < 0 && maxValue > 0) {
-      if (desiredLength > minLengthValue && desiredLength > maxLengthValue) {
-        return 'Desired length is not valid for the given range'
-      }
-    } else if (minValue < 0 || maxValue < 0) {
-      if (desiredLength > minLengthValue || desiredLength < maxLengthValue) {
-        return 'Desired length is not valid for the given range'
-      }
-    } else {
-      if (desiredLength < minLengthValue || desiredLength > maxLengthValue) {
-        return 'Desired length is not valid for the given range'
-      }
+    const handleIntegersLengthChange = e => {
+        handleChange(
+            e.target.value.trim(),
+            setIntegersLength,
+            errorMessage =>
+                setError({ ...error, integersLength: errorMessage }),
+            value =>
+                value === ''
+                    ? 'Length is required'
+                    : value === '0'
+                      ? 'Length must be greater than 0'
+                      : parseInt(value) < 1 || isNaN(parseInt(value))
+                        ? 'Please enter a valid positive integer'
+                        : (() => {
+                              const parsedValue = parseInt(value)
+                              const min = parseInt(minValue)
+                              const max = parseInt(maxValue)
+                              const validationError = isValidIntegerLength(
+                                  min,
+                                  max,
+                                  parsedValue
+                              )
+                              return validationError || ''
+                          })()
+        )
     }
-    return null
-  }
 
-  const handleIntegersLengthChange = e => {
-    const value = e.target.value.trim()
+    const handleCountOfIntegersChange = e =>
+        handleChange(
+            e.target.value.trim(),
+            setCountOfIntegers,
+            errorMessage =>
+                setError({ ...error, countOfIntegers: errorMessage }),
+            value =>
+                value === ''
+                    ? ''
+                    : value <= 0
+                      ? 'Count must be greater than 0'
+                      : value > 100000
+                        ? 'Count must not exceed 100,000'
+                        : null
+        )
 
-    const setErrorForValue = errorMessage => {
-      setError({ ...error, integersLength: errorMessage })
+    const type = data.title
+    const payloadData = {
+        min_value: minValue,
+        max_value: maxValue,
+        desired_length: integersLength,
+        count: countOfIntegers,
+        show_length: isLengthChecked,
+        show_count: isCountChecked,
+        type: type
     }
 
-    setIntegersLength(value)
-
-    if (value === '') {
-      setErrorForValue('Length is required')
-    } else {
-      const parsedValue = parseInt(value)
-      if (parsedValue === 0) {
-        setErrorForValue('Length must be greater than 0')
-      } else if (parsedValue < 1 || isNaN(parsedValue)) {
-        setErrorForValue('Please enter a valid positive integer')
-      } else {
-        const min = parseInt(minValue)
-        const max = parseInt(maxValue)
-        const desiredLength = parsedValue
-        const validationError = isValidIntegerLength(min, max, desiredLength)
-        if (validationError !== null) {
-          setErrorForValue(validationError)
-        } else {
-          setIntegersLength(parsedValue)
-          setErrorForValue('')
+    const handleGenerate = async () => {
+        const setGeneratedData = data => {
+            // Implement the logic to set the generated data
+            console.log('Setting generated data:', data)
         }
-      }
-    }
-  }
 
-  const handleCountOfIntegersChange = e => {
-    const value = e.target.value.trim()
+        try {
+            const responseData = await ApiRequest(
+                `generate${type}`, // Use capitalizedValue in the request
+                'POST',
+                payloadData
+            )
 
-    const setErrorForValue = errorMessage => {
-      setError({ ...error, numberOfIntegers: errorMessage })
-    }
-
-    setCountOfIntegers(value)
-
-    if (value === '') {
-      setErrorForValue('Count is required')
-    } else {
-      const parsedValue = parseInt(value)
-      if (parsedValue === 0) {
-        setErrorForValue('Count must be greater than 0')
-      } else if (parsedValue < 1 || isNaN(parsedValue)) {
-        setErrorForValue('Please enter a valid positive integer')
-      } else if (parsedValue > 100000) {
-        setErrorForValue('Count must not exceed 100,000')
-      } else {
-        setErrorForValue('')
-      }
-    }
-  }
-
-  const type = data.title
-  const payloadData = {
-    min_value: minValue,
-    max_value: maxValue,
-    desired_length: integersLength,
-    count: countOfIntegers,
-    show_length: isLengthChecked,
-    show_count: isCountChecked,
-    type: type
-  }
-
-  const handleGenerate = async () => {
-    const setGeneratedData = data => {
-      // Implement the logic to set the generated data
-      console.log('Setting generated data:', data)
+            // Handle the response data as needed
+            console.log(`Received data for ${type}:`, responseData)
+            setGeneratedData(responseData)
+        } catch (error) {
+            // Error handling
+            console.error(`Error fetching data:`, error)
+        }
     }
 
-    try {
-      const responseData = await ApiRequest(
-        `generate${type}`, // Use capitalizedValue in the request
-        'POST',
-        payloadData
-      )
-
-      // Handle the response data as needed
-      console.log(`Received data for ${type}:`, responseData)
-      setGeneratedData(responseData)
-    } catch (error) {
-      // Error handling
-      console.error(`Error fetching data:`, error)
+    const handleCopy = () => {
+        // your handleCopy function logic
     }
-  }
 
-  const handleCopy = () => {
-    // your handleCopy function logic
-  }
+    const handleReset = () => {
+        // Implement reset functionality here for array generator
+        setMinValue(initialState.minValue)
+        setMaxValue(initialState.maxValue)
+        setCountOfIntegers(initialState.countOfIntegers)
+        setIntegersLength(initialState.integersLength)
+        setError(initialState.error)
+        setIsLengthChecked(initialState.isLengthChecked)
+        setIsCountChecked(initialState.isCountChecked)
+    }
 
-  const handleReset = () => {
-    // Implement reset functionality here for array generator
-    setMinValue(initialState.minValue)
-    setMaxValue(initialState.maxValue)
-    setCountOfIntegers(initialState.numberOfIntegers)
-    setIntegersLength(initialState.integersLength)
-    setError(initialState.error)
-    setIsLengthChecked(initialState.isLengthChecked)
-    setIsCountChecked(initialState.isNumberChecked)
-  }
+    const handleDownload = () => {
+        // your handleDownload function logic
+    }
 
-  const handleDownload = () => {
-    // your handleDownload function logic
-  }
+    const handleSendToEmail = () => {
+        // your handleSendToEmail function logic
+    }
 
-  const handleSendToEmail = () => {
-    // your handleSendToEmail function logic
-  }
+    const hasErrors = Object.values(error).some(
+        errorMessage => errorMessage !== ''
+    )
 
-  const hasErrors = Object.values(error).some(
-    errorMessage => errorMessage !== ''
-  )
+    if (!isOpen) return null
 
-  if (!isOpen) return null
+    const buttons = [
+        {
+            label: 'Generate',
+            onClick: handleGenerate,
+            disabled: hasErrors,
+            classNames: `hover:bg-blue-700 hover:text-white border-blue-600 border-2 ${hasErrors ? 'cursor-not-allowed bg-gray-300 border-gray-400 text-gray-600' : 'hover:bg-blue-700'}`
+        },
+        {
+            label: 'Copy',
+            onClick: handleCopy,
+            classNames: `hover:bg-purple-700 hover:text-white border-purple-600 border-2`
+        },
+        {
+            label: 'Reset',
+            onClick: handleReset,
+            classNames: `hover:bg-red-700 hover:text-white border-red-600 border-2`
+        },
+        {
+            label: 'Download',
+            onClick: handleDownload,
+            classNames: `hover:bg-orange-700 hover:text-white border-orange-600 border-2`
+        },
+        {
+            label: 'Send to Email',
+            onClick: handleSendToEmail,
+            classNames: `hover:bg-green-700 hover:text-white border-green-600 border-2`
+        }
+    ]
 
-  return (
-    <div className='modal'>
-      <div className='grid grid-cols-1 sm:grid-cols-4 gap-4'>
-        <div>
-          <label className='block text-base font-medium text-dark dark:text-black'>
-            Min Value<span className='text-red-500'>*</span>
-          </label>
-          <input
-            type='number'
-            placeholder='Minimum'
-            value={minValue}
-            onChange={handleMinValueChange}
-            className={`w-full bg-transparent rounded-md border ${
-              error.minValue !== '' ? 'border-red-500' : 'border-stroke'
-            } dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary`}
-          />
-          {error.minValue && (
-            <p className='error text-red-500 text-xs'>{error.minValue}</p>
-          )}
+    return (
+        <div className='modal'>
+            <div className='grid grid-cols-1 sm:grid-cols-4 gap-4'>
+                <InputField
+                    label='Min value'
+                    value={minValue}
+                    onChange={handleMinValueChange}
+                    placeholder='Minimum'
+                    error={error.minValue}
+                    isRequired={true}
+                />
+                <InputField
+                    label='Max Value'
+                    value={maxValue}
+                    onChange={handleMaxValueChange}
+                    placeholder='Maximum'
+                    error={error.maxValue}
+                    isRequired={true}
+                />
+                <InputField
+                    label="Integer's Length"
+                    value={integersLength}
+                    onChange={handleIntegersLengthChange}
+                    placeholder='Length'
+                    error={error.integersLength}
+                    isRequired={true}
+                />
+                <InputField
+                    label='Count of Integers'
+                    value={countOfIntegers}
+                    onChange={handleCountOfIntegersChange}
+                    placeholder='Count'
+                    error={error.countOfIntegers}
+                    isRequired={true}
+                />
+            </div>
+            <div className='grid grid-cols-1 sm:grid-cols-3 gap-8'>
+                <ToggleSwitch
+                    checked={isLengthChecked}
+                    onChange={handleIsLengthChecked}
+                    rightLabel='Show length'
+                />
+                <ToggleSwitch
+                    checked={isCountChecked}
+                    onChange={handleIsCountChecked}
+                    rightLabel='Show count'
+                />
+            </div>
+            <div>
+                <ButtonGroup buttons={buttons} />
+            </div>
         </div>
-        <div>
-          <label className='block text-base font-medium text-dark dark:text-black'>
-            Max Value<span className='text-red-500'>*</span>
-          </label>
-          <input
-            type='number'
-            placeholder='Maximum'
-            value={maxValue}
-            onChange={handleMaxValueChange}
-            className={`w-full bg-transparent rounded-md border ${
-              error.maxValue !== '' ? 'border-red-500' : 'border-stroke'
-            } dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary`}
-          />
-          {error.maxValue && (
-            <p className='error text-red-500 text-xs'>{error.maxValue}</p>
-          )}
-        </div>
-        <div>
-          <label className='block text-base font-medium text-dark dark:text-black'>
-            Integer&apos;s Length
-            <span className='text-red-500'>*</span>
-          </label>
-          <input
-            type='number'
-            placeholder='Length'
-            value={integersLength}
-            onChange={handleIntegersLengthChange}
-            className={`w-full bg-transparent rounded-md border ${
-              error.integersLength !== '' ? 'border-red-500' : 'border-stroke'
-            } dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary`}
-          />
-          {error.integersLength && (
-            <p className='error text-red-500 text-xs'>{error.integersLength}</p>
-          )}
-        </div>
-        <div>
-          <label className='block text-base font-medium text-dark dark:text-black'>
-            Count of Integers
-            <span className='text-red-500'>*</span>
-          </label>
-          <input
-            type='number'
-            placeholder='Count'
-            value={countOfIntegers}
-            onChange={handleCountOfIntegersChange}
-            className={`w-full bg-transparent rounded-md border ${
-              error.numberOfIntegers !== '' ? 'border-red-500' : 'border-stroke'
-            } dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary`}
-          />
-          {error.numberOfIntegers && (
-            <p className='error text-red-500 text-xs'>
-              {error.numberOfIntegers}
-            </p>
-          )}
-        </div>
-      </div>
-      <label className='autoSaverSwitch relative inline-flex cursor-pointer select-none items-center px-5 my-4'>
-        <input
-          type='checkbox'
-          name='autoSaver'
-          className='sr-only'
-          checked={isLengthChecked}
-          onChange={handleIsLengthChecked}
-        />
-        <span
-          className={`slider mr-3 flex h-[26px] w-[50px] items-center rounded-full p-1 duration-200 ${
-            isLengthChecked ? 'bg-[#088F8F]' : 'bg-[#FF5733]'
-          }`}
-        >
-          <span
-            className={`dot h-[18px] w-[18px] rounded-full bg-white duration-200 ${
-              isLengthChecked ? 'translate-x-6' : ''
-            }`}
-          ></span>
-        </span>
-        <span className='label flex items-center text-sm font-medium text-black'>
-          Show Length
-        </span>
-      </label>
-      <label className='autoSaverSwitch relative inline-flex cursor-pointer select-none items-center px-5 my-4'>
-        <input
-          type='checkbox'
-          name='autoSaver'
-          className='sr-only'
-          checked={isCountChecked}
-          onChange={handleIsNumberChecked}
-        />
-        <span
-          className={`slider mr-3 flex h-[26px] w-[50px] items-center rounded-full p-1 duration-200 ${
-            isCountChecked ? 'bg-[#088F8F]' : 'bg-[#FF5733]'
-          }`}
-        >
-          <span
-            className={`dot h-[18px] w-[18px] rounded-full bg-white duration-200 ${
-              isCountChecked ? 'translate-x-6' : ''
-            }`}
-          ></span>
-        </span>
-        <span className='label flex items-center text-sm font-medium text-black'>
-          Show Count
-        </span>
-      </label>
-      <div className='font-[sans-serif] space-x-4 space-y-4 text-center'>
-        <button
-          type='button'
-          className={`px-6 py-2 rounded-lg text-black text-sm tracking-wider font-medium outline-none border-2 border-blue-600 transition-all duration-300 ${
-            hasErrors
-              ? 'bg-gray-300 border-gray-400 text-gray-600 cursor-not-allowed'
-              : 'hover:bg-blue-600 hover:text-white'
-          }`}
-          onClick={handleGenerate}
-          disabled={hasErrors}
-        >
-          Generate
-        </button>
-        <button
-          type='button'
-          className='px-6 py-2 rounded-lg text-black text-sm tracking-wider font-medium outline-none border-2 border-purple-600 hover:bg-purple-600 hover:text-white transition-all duration-300'
-          onClick={handleCopy}
-        >
-          Copy
-        </button>
-        <button
-          type='button'
-          className='px-6 py-2 rounded-lg text-black text-sm tracking-wider font-medium outline-none border-2 border-red-600 hover:bg-red-600 hover:text-white transition-all duration-300'
-          onClick={handleReset}
-        >
-          Reset
-        </button>
-        <button
-          type='button'
-          className='px-6 py-2 rounded-lg text-black text-sm tracking-wider font-medium outline-none border-2 border-orange-600 hover:bg-orange-600 hover:text-white transition-all duration-300'
-          onClick={handleDownload}
-        >
-          Download
-        </button>
-        <button
-          type='button'
-          className='px-6 py-2 rounded-lg text-black text-sm tracking-wider font-medium outline-none border-2 border-green-600 hover:bg-green-600 hover:text-white transition-all duration-300'
-          onClick={handleSendToEmail}
-        >
-          Send to Email
-        </button>
-      </div>
-    </div>
-  )
+    )
 }
 
 IntegerGeneratorModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  data: PropTypes.object.isRequired
+    isOpen: PropTypes.bool.isRequired,
+    data: PropTypes.object.isRequired
 }
 
 export default IntegerGeneratorModal

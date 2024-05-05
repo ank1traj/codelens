@@ -17,18 +17,19 @@ export default function Hero() {
                 <div className='mx-auto max-w-4xl py-8 sm:py-48 lg:py-8 xl:py-16 2xl:py-24'>
                     <div className='text-center'>
                         <h2 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl'>
-                            Automate Your Test Case Generation
+                            Instant Complexity Analysis & Algorithm
+                            Recommendations
                         </h2>
                         <p className='mt-6 text-lg leading-8 text-gray-600'>
-                            Introducing Testcase Generator: Your Solution for
-                            Efficient CP Testing
+                            Enter constraints, get the best algorithm
+                            solutions—fast.
                         </p>
                         <p className='mt-3 text-lg leading-8 text-gray-500'>
-                            Testcase Generator revolutionizes the process of
-                            generating test cases for Competitive Programming
-                            (CP). By automating the creation of test cases based
-                            on input data, specified constraints, and test case
-                            conditions.
+                            Optimize your competitive programming strategies
+                            with our tool that analyzes algorithm complexity
+                            based on your specific constraints. Simply input
+                            your problem details and get instant recommendations
+                            on the most efficient algorithms.
                         </p>
                     </div>
                 </div>

@@ -18,6 +18,7 @@ import ForbiddenPage from '@/components/error/403'
 import ComingSoonPage from '@/components/comingSoon'
 
 import TestMaker from '@/pages/testmaker'
+import Constraints from '@/pages/constraints'
 
 import * as Sentry from '@sentry/browser'
 import { v4 as uuidv4 } from 'uuid'
@@ -25,90 +26,103 @@ import { useUser } from '@clerk/clerk-react'
 
 const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN
 if (!SENTRY_DSN) {
-  throw new Error('Missing Sentry DSN Key')
+    throw new Error('Missing Sentry DSN Key')
 }
 Sentry.init({
-  dsn: SENTRY_DSN,
-  environment: import.meta.env.SENTRY_ENVIRONMENT || 'development',
-  integrations: [
-    Sentry.browserTracingIntegration(),
-    Sentry.replayIntegration({
-      maskAllText: false,
-      blockAllMedia: false
-    }),
-    Sentry.feedbackIntegration({
-      // Additional SDK configuration goes in here, for example:
-      showBranding: false,
-      colorScheme: 'system'
-    })
-  ],
-  // Performance Monitoring
-  tracesSampleRate: 1.0, //  Capture 100% of the transactions
-  // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-  tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/],
-  // Session Replay
-  replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-  replaysOnErrorSampleRate: 1.0 // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
+    dsn: SENTRY_DSN,
+    environment: import.meta.env.SENTRY_ENVIRONMENT || 'development',
+    integrations: [
+        Sentry.browserTracingIntegration(),
+        Sentry.replayIntegration({
+            maskAllText: false,
+            blockAllMedia: false
+        }),
+        Sentry.feedbackIntegration({
+            // Additional SDK configuration goes in here, for example:
+            showBranding: false,
+            isNameRequired: true,
+            isEmailRequired: true,
+            colorScheme: 'system'
+        })
+    ],
+    // Performance Monitoring
+    tracesSampleRate: 1.0, //  Capture 100% of the transactions
+    // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
+    tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/],
+    // Session Replay
+    replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
+    replaysOnErrorSampleRate: 1.0 // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
 })
 
 function App() {
-  const { isSignedIn, user } = useUser()
-  useEffect(() => {
-    const initializeSentry = () => {
-      const userFeedback = {
-        event_id: uuidv4(),
-        name: isSignedIn ? user?.fullName || '' : '',
-        email: isSignedIn ? user?.primaryEmailAddress?.emailAddress || '' : ''
-      }
+    const { isSignedIn, user } = useUser()
 
-      Sentry.setUser({
-        id: userFeedback.event_id,
-        username: userFeedback.name,
-        email: userFeedback.email
-      })
+    useEffect(() => {
+        const initializeSentry = () => {
+            const userFeedback = {
+                event_id: uuidv4(),
+                name: isSignedIn ? user?.fullName || '' : '',
+                email: isSignedIn
+                    ? user?.primaryEmailAddress?.emailAddress || ''
+                    : ''
+            }
 
-      Sentry.captureMessage('User Feedback', {
-        user: userFeedback
-      })
-    }
+            Sentry.setUser({
+                id: userFeedback.event_id,
+                username: userFeedback.name,
+                email: userFeedback.email
+            })
 
-    if (isSignedIn !== undefined) {
-      initializeSentry()
-    }
-  }, [isSignedIn, user])
+            Sentry.captureMessage('User Feedback', {
+                user: userFeedback
+            })
+        }
 
-  return (
-    <BrowserRouter>
-      <Header /> {/* Render Header component everywhere */}
-      <CookieNotice />
-      <Routes>
-        <Route
-          path='/'
-          element={
-            <>
-              <Hero />
-              <Feature />
-              <Pricing />
-              <Team />
-              <CallToAction />
-              <Footer />
-            </>
-          }
-        />
-        <Route
-          path='/testmaker'
-          element={
-            <Protect fallback=<ForbiddenPage />>
-              <TestMaker />
-            </Protect>
-          }
-        />
-        {/* Route for handling unmatched paths */}
-        <Route path='*' element={<NotFoundPage />} />
-        <Route path='/comingSoon' element={<ComingSoonPage />} />
-      </Routes>
-    </BrowserRouter>
-  )
+        if (isSignedIn !== undefined) {
+            initializeSentry()
+        }
+    }, [isSignedIn, user])
+
+    return (
+        <BrowserRouter>
+            <Header /> {/* Render Header component everywhere */}
+            <CookieNotice />
+            <Routes>
+                <Route
+                    path='/'
+                    element={
+                        <>
+                            <Hero />
+                            <Feature />
+                            <Pricing />
+                            <Team />
+                            <CallToAction />
+                            <Footer />
+                        </>
+                    }
+                />
+                <Route
+                    path='/testmaker'
+                    element={
+                        <Protect fallback=<ForbiddenPage />>
+                            <TestMaker />
+                        </Protect>
+                    }
+                />
+                <Route
+                    path='/constraints'
+                    element={
+                        <Protect fallback=<ForbiddenPage />>
+                            <Constraints />
+                        </Protect>
+                    }
+                />
+                {/* Route for handling unmatched paths */}
+                <Route path='*' element={<NotFoundPage />} />
+                <Route path='/comingSoon' element={<ComingSoonPage />} />
+            </Routes>
+        </BrowserRouter>
+    )
 }
 
 export default App
