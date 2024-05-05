@@ -5,7 +5,7 @@ import ArrayGeneratorModal from '@/components/Modal/components/arrayGenerator.js
 import StringGeneratorModal from '@/components/Modal/components/stringGenerator.jsx'
 import PalindromeGeneratorModal from '@/components/Modal/components/palindromeGenerator.jsx'
 
-const Modal = ({ isOpen, onClose, links, data, size }) => {
+const Modal = ({ isOpen, onClose, links, data }) => {
     useEffect(() => {
         const handleKeyDown = event => {
             if (event.key === 'Escape') {
@@ -43,7 +43,7 @@ const Modal = ({ isOpen, onClose, links, data, size }) => {
             <div className='modal-overlay absolute w-full h-full bg-gray-900 opacity-50'></div>
 
             <div
-                className={`modal-container bg-white w-11/12 md:max-w-${size} mx-auto rounded shadow-lg z-50`}
+                className={`modal-container bg-white w-11/12 md:max-w-3xl mx-auto rounded shadow-lg z-50`}
             >
                 <div className='modal-content py-4 text-left px-6'>
                     <div className='flex justify-between items-center pb-3'>
