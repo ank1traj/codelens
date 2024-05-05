@@ -21,8 +21,7 @@ const TestHomePage = () => {
             title: 'String',
             description: 'Generate random string of characters',
             iconType: CheckCircleIcon,
-            iconColor: 'text-green-500',
-            size: '3xl'
+            iconColor: 'text-green-500'
         },
         {
             title: 'Array',
