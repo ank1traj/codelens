@@ -6,7 +6,8 @@ const MultiSelectDropdown = ({
     heading,
     disabled,
     onChange,
-    value
+    value,
+    multiSelect = true
 }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [selectedOptions, setSelectedOptions] = useState(value || []) // Initialize with value prop
@@ -41,9 +42,16 @@ const MultiSelectDropdown = ({
     }
 
     const handleOptionToggle = optionValue => {
-        const updatedOptions = selectedOptions.includes(optionValue)
-            ? selectedOptions.filter(option => option !== optionValue)
-            : [...selectedOptions, optionValue]
+        let updatedOptions = []
+        if (multiSelect) {
+            updatedOptions = selectedOptions.includes(optionValue)
+                ? selectedOptions.filter(option => option !== optionValue)
+                : [...selectedOptions, optionValue]
+        } else {
+            updatedOptions = selectedOptions.includes(optionValue)
+                ? []
+                : [optionValue]
+        }
 
         setSelectedOptions(updatedOptions)
         onChange(updatedOptions)
@@ -116,7 +124,8 @@ MultiSelectDropdown.propTypes = {
     heading: PropTypes.string.isRequired,
     disabled: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
-    value: PropTypes.array // Prop for passing currently selected options
+    value: PropTypes.array,
+    multiSelect: PropTypes.bool
 }
 
 export default MultiSelectDropdown

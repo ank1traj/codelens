@@ -5,45 +5,68 @@ import ApiRequest from '@/components/api'
 import ToggleSwitch from '@/components/checkbox'
 import ButtonGroup from '@/components/buttons'
 import InputField from '@/components/inputs'
+import MultiSelectDropdown from '@/components/multiSelectDropdown'
 
-const IntegerGeneratorModal = ({ isOpen, data }) => {
+const LinkedlistGeneratorModal = ({ isOpen, data }) => {
     const initialState = {
         minValue: -100,
         maxValue: 1,
-        countOfIntegers: 1,
-        integersLength: 1,
+        listSize: 1,
+        headValue: 1,
+        countOfList: 1,
         error: {
             minValue: '',
             maxValue: '',
-            countOfIntegers: '',
-            integersLength: ''
+            listSize: '',
+            headValue: '',
+            countOfList: ''
         },
-        isLengthChecked: false,
-        isCountChecked: false
+        isEdgeAndVertexChecked: false,
+        isSizeChecked: false,
+        isCountChecked: false,
+        isFloatChecked: false,
+        selectedLinkedListOptions: [],
+        selectedLinkedistType: [],
+        selectedLinkedListNodeOptions: []
     }
 
     const [minValue, setMinValue] = useState(initialState.minValue)
     const [maxValue, setMaxValue] = useState(initialState.maxValue)
-    const [countOfIntegers, setCountOfIntegers] = useState(
-        initialState.countOfIntegers
-    )
-    const [integersLength, setIntegersLength] = useState(
-        initialState.integersLength
-    )
+    const [listSize, setListSize] = useState(initialState.listSize)
+    const [headValue, setHeadValue] = useState(initialState.headValue)
+    const [countOfList, setCountOfList] = useState(initialState.countOfList)
     const [error, setError] = useState(initialState.error)
-    const [isLengthChecked, setIsLengthChecked] = useState(
-        initialState.isLengthChecked
+    const [isSizeChecked, setIsSizeChecked] = useState(
+        initialState.isSizeChecked
     )
     const [isCountChecked, setIsCountChecked] = useState(
         initialState.isCountChecked
     )
+    const [selectedLinkedListOptions, setSelectedLinkedListOptions] = useState(
+        initialState.selectedLinkedListOptions
+    )
+    const [selectedLinkedistType, setSelectedLinkedistType] = useState(
+        initialState.selectedLinkedistType
+    )
+    const [selectedLinkedListNodeOptions, setSelectedLinkedListNodeOptions] =
+        useState(initialState.selectedLinkedListNodeOptions)
 
-    const handleIsLengthChecked = () => {
-        setIsLengthChecked(!isLengthChecked)
+    const handleIsSizeChecked = () => {
+        setIsSizeChecked(!isSizeChecked)
     }
 
     const handleIsCountChecked = () => {
         setIsCountChecked(!isCountChecked)
+    }
+
+    const handleLinkedListOptionsChange = selectedLinkedListOptions => {
+        setSelectedLinkedListOptions(selectedLinkedListOptions)
+    }
+    const handleLinkedListTypeChange = selectedLinkedistType => {
+        setSelectedLinkedistType(selectedLinkedistType)
+    }
+    const handleNodeOptionsChange = selectedLinkedListNodeOptions => {
+        setSelectedLinkedListNodeOptions(selectedLinkedListNodeOptions)
     }
 
     const handleChange = (value, setter, setErrorForValue, errorMessageFn) => {
@@ -92,72 +115,41 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
                       : ''
         )
 
-    const isValidIntegerLength = (minValue, maxValue, desiredLength) => {
-        const countIntegers = num => {
-            return num.toString().replace('-', '').length
-        }
-
-        const minLengthValue = countIntegers(minValue)
-        const maxLengthValue = countIntegers(maxValue)
-
-        if (minValue < 0 && maxValue > 0) {
-            if (
-                desiredLength > minLengthValue &&
-                desiredLength > maxLengthValue
-            ) {
-                return 'Desired length is not valid for the given range'
-            }
-        } else if (minValue < 0 || maxValue < 0) {
-            if (
-                desiredLength > minLengthValue ||
-                desiredLength < maxLengthValue
-            ) {
-                return 'Desired length is not valid for the given range'
-            }
-        } else {
-            if (
-                desiredLength < minLengthValue ||
-                desiredLength > maxLengthValue
-            ) {
-                return 'Desired length is not valid for the given range'
-            }
-        }
-        return null
-    }
-
-    const handleIntegersLengthChange = e => {
+    const handleListSizeValueChange = e =>
         handleChange(
             e.target.value.trim(),
-            setIntegersLength,
-            errorMessage =>
-                setError({ ...error, integersLength: errorMessage }),
+            setListSize,
+            errorMessage => setError({ ...error, listSize: errorMessage }),
             value =>
                 value === ''
-                    ? 'Length is required'
-                    : value === '0'
-                      ? 'Length must be greater than 0'
-                      : parseInt(value) < 1 || isNaN(parseInt(value))
-                        ? 'Please enter a valid positive integer'
-                        : (() => {
-                              const parsedValue = parseInt(value)
-                              const min = parseInt(minValue)
-                              const max = parseInt(maxValue)
-                              const validationError = isValidIntegerLength(
-                                  min,
-                                  max,
-                                  parsedValue
-                              )
-                              return validationError || ''
-                          })()
+                    ? ''
+                    : value <= 0
+                      ? 'Edges must be greater than 0'
+                      : value > 100000
+                        ? 'Edges must not exceed 100,000'
+                        : null
         )
-    }
 
-    const handleCountOfIntegersChange = e =>
+    const handleHeadValueChange = e =>
         handleChange(
             e.target.value.trim(),
-            setCountOfIntegers,
-            errorMessage =>
-                setError({ ...error, countOfIntegers: errorMessage }),
+            setHeadValue,
+            errorMessage => setError({ ...error, headValue: errorMessage }),
+            value =>
+                value === ''
+                    ? ''
+                    : value <= 0
+                      ? 'Vertices must be greater than 0'
+                      : value > 100000
+                        ? 'Vertices must not exceed 100,000'
+                        : null
+        )
+
+    const handleCountOfListChange = e =>
+        handleChange(
+            e.target.value.trim(),
+            setCountOfList,
+            errorMessage => setError({ ...error, countOfList: errorMessage }),
             value =>
                 value === ''
                     ? ''
@@ -172,10 +164,14 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
     const payloadData = {
         min_value: minValue,
         max_value: maxValue,
-        integer_length: integersLength,
-        integer_count: countOfIntegers,
-        show_length: isLengthChecked,
+        list_size: listSize,
+        head_value: headValue,
+        list_count: countOfList,
+        show_size: isSizeChecked,
         show_count: isCountChecked,
+        linkedlist_options: selectedLinkedListOptions,
+        linkedlist_type: selectedLinkedistType,
+        node_options: selectedLinkedListNodeOptions,
         type: type
     }
 
@@ -209,11 +205,13 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
         // Implement reset functionality here for array generator
         setMinValue(initialState.minValue)
         setMaxValue(initialState.maxValue)
-        setCountOfIntegers(initialState.countOfIntegers)
-        setIntegersLength(initialState.integersLength)
+        setListSize(initialState.listSize)
+        setCountOfList(initialState.countOfList)
         setError(initialState.error)
-        setIsLengthChecked(initialState.isLengthChecked)
+        setIsSizeChecked(initialState.isSizeChecked)
         setIsCountChecked(initialState.isCountChecked)
+        setSelectedLinkedListOptions(initialState.selectedLinkedListOptions)
+        setSelectedLinkedistType(initialState.selectedLinkedistType)
     }
 
     const handleDownload = () => {
@@ -259,9 +257,21 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
         }
     ]
 
+    const linkedListOptions = ['Add Node', 'Delete Node', 'Update Node']
+    const linledListType = ['Doubly', 'Circular']
+    const linkedListNodeOptions = [
+        'At Start',
+        'At End',
+        'At Midle',
+        'At Position',
+        'Random'
+    ]
+
+    let linkedListModify = !selectedLinkedListOptions.length > 0
+
     return (
         <div className='modal'>
-            <div className='grid grid-cols-1 sm:grid-cols-4 gap-4'>
+            <div className={`grid grid-cols-1 sm:grid-cols-5 gap-4`}>
                 <InputField
                     label='Min value'
                     value={minValue}
@@ -279,32 +289,63 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
                     isRequired={true}
                 />
                 <InputField
-                    label="Integer's Length"
-                    value={integersLength}
-                    onChange={handleIntegersLengthChange}
-                    placeholder='Length'
-                    error={error.integersLength}
+                    label="List's Size"
+                    value={listSize}
+                    onChange={handleListSizeValueChange}
+                    placeholder='Size'
+                    error={error.listSize}
                     isRequired={true}
                 />
                 <InputField
-                    label='Count of Integers'
-                    value={countOfIntegers}
-                    onChange={handleCountOfIntegersChange}
+                    label='Head Value'
+                    value={headValue}
+                    onChange={handleHeadValueChange}
+                    placeholder='Head'
+                    error={error.headValue}
+                    isRequired={true}
+                />
+                <InputField
+                    label='Count of Lists'
+                    value={countOfList}
+                    onChange={handleCountOfListChange}
                     placeholder='Count'
-                    error={error.countOfIntegers}
+                    error={error.countOfList}
                     isRequired={true}
                 />
             </div>
             <div className='grid grid-cols-1 sm:grid-cols-3 gap-8'>
                 <ToggleSwitch
-                    checked={isLengthChecked}
-                    onChange={handleIsLengthChecked}
-                    rightLabel='Show length'
+                    checked={isSizeChecked}
+                    onChange={handleIsSizeChecked}
+                    rightLabel='Show Size'
                 />
                 <ToggleSwitch
                     checked={isCountChecked}
                     onChange={handleIsCountChecked}
                     rightLabel='Show count'
+                />
+            </div>
+            <div className='grid sm:grid-cols-3 text-sm font-sm'>
+                <MultiSelectDropdown
+                    heading='Select LinkedList Options'
+                    options={linkedListOptions}
+                    onChange={handleLinkedListOptionsChange}
+                    value={selectedLinkedListOptions}
+                    multiSelect={false}
+                />
+                <MultiSelectDropdown
+                    heading='Select LinkedList type'
+                    options={linledListType}
+                    onChange={handleLinkedListTypeChange}
+                    value={selectedLinkedistType}
+                />
+                <MultiSelectDropdown
+                    heading='Select Node Position'
+                    options={linkedListNodeOptions}
+                    onChange={handleNodeOptionsChange}
+                    value={selectedLinkedListNodeOptions}
+                    disabled={linkedListModify}
+                    multiSelect={false}
                 />
             </div>
             <div>
@@ -314,9 +355,9 @@ const IntegerGeneratorModal = ({ isOpen, data }) => {
     )
 }
 
-IntegerGeneratorModal.propTypes = {
+LinkedlistGeneratorModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     data: PropTypes.object.isRequired
 }
 
-export default IntegerGeneratorModal
+export default LinkedlistGeneratorModal

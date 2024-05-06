@@ -4,6 +4,8 @@ import IntegerGeneratorModal from '@/components/Modal/components/integerGenerato
 import ArrayGeneratorModal from '@/components/Modal/components/arrayGenerator.jsx'
 import StringGeneratorModal from '@/components/Modal/components/stringGenerator.jsx'
 import PalindromeGeneratorModal from '@/components/Modal/components/palindromeGenerator.jsx'
+import LinkedlistGeneratorModal from '@/components/Modal/components/linkedlistGenerator'
+import GraphGeneratorModal from '@/components/Modal/components/graphGenerator.jsx'
 
 const Modal = ({ isOpen, onClose, links, data }) => {
     useEffect(() => {
@@ -43,7 +45,7 @@ const Modal = ({ isOpen, onClose, links, data }) => {
             <div className='modal-overlay absolute w-full h-full bg-gray-900 opacity-50'></div>
 
             <div
-                className={`modal-container bg-white w-11/12 md:max-w-3xl mx-auto rounded shadow-lg z-50`}
+                className={`modal-container bg-white w-11/12 md:max-w-4xl mx-auto rounded shadow-lg z-50`}
             >
                 <div className='modal-content py-4 text-left px-6'>
                     <div className='flex justify-between items-center pb-3'>
@@ -77,6 +79,12 @@ const Modal = ({ isOpen, onClose, links, data }) => {
                     )}
                     {title === 'Palindrome' && (
                         <PalindromeGeneratorModal isOpen={isOpen} data={data} />
+                    )}
+                    {title === 'Linked List' && (
+                        <LinkedlistGeneratorModal isOpen={isOpen} data={data} />
+                    )}
+                    {title === 'Graph' && (
+                        <GraphGeneratorModal isOpen={isOpen} data={data} />
                     )}
                 </div>
             </div>

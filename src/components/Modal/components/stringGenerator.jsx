@@ -62,15 +62,12 @@ const StringGeneratorModal = ({ isOpen, data }) => {
 
     const handleCharOptionsChange = selectedCharOptions => {
         setSelectedCharOptions(selectedCharOptions)
-        // You can perform any additional logic here with the selected options
     }
     const handleStringTypeChange = selectedStringType => {
         setSelectedStringType(selectedStringType)
-        // You can perform any additional logic here with the selected options
     }
     const handleCharTypeChange = selectedCharType => {
         setSelectedCharType(selectedCharType)
-        // You can perform any additional logic here with the selected options
     }
     const handleChange = (value, setter, setErrorForValue, errorMessageFn) => {
         const numericValue = parseInt(value, 10)
@@ -84,7 +81,7 @@ const StringGeneratorModal = ({ isOpen, data }) => {
                     setErrorForValue('Value cannot exceed 100,000')
                 } else {
                     const errorMessage = errorMessageFn(parsedValue)
-                    setErrorForValue(errorMessage || '') // Set error message to empty string if valid
+                    setErrorForValue(errorMessage || '')
                 }
             } else {
                 setErrorForValue('Please enter a valid integer')
@@ -155,8 +152,8 @@ const StringGeneratorModal = ({ isOpen, data }) => {
 
     const type = data.title
     const payloadData = {
-        desired_length: stringsLength,
-        count: countOfStrings,
+        string_length: stringsLength,
+        string_count: countOfStrings,
         show_length: isLengthChecked,
         show_count: isCountChecked,
         include_chars: includeChars,
@@ -250,18 +247,13 @@ const StringGeneratorModal = ({ isOpen, data }) => {
         }
     ]
 
-    const charOptions = ['a-z', 'A-Z', '0-9', 'Special Chars']
+    const charOptions = ['a-z', 'A-Z', '0-9', 'Special Chars', 'Distinct']
     const stringsOptions = [
         'Random Size',
         'Distinct',
         'Distinct(Case Sensitive)'
     ]
-    const charTypes = [
-        'Increasing',
-        'Decreasing',
-        'Random',
-        'Distinct Characters'
-    ]
+    const charTypes = ['Increasing', 'Decreasing', 'Random']
 
     return (
         <div>
@@ -324,12 +316,14 @@ const StringGeneratorModal = ({ isOpen, data }) => {
                     options={stringsOptions}
                     onChange={handleStringTypeChange}
                     value={selectedStringType}
+                    multiSelect={false}
                 />
                 <MultiSelectDropdown
                     heading='Select Char type'
                     options={charTypes}
                     onChange={handleCharTypeChange}
                     value={selectedCharType}
+                    multiSelect={false}
                 />
             </div>
 
