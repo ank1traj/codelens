@@ -7,63 +7,68 @@ import ButtonGroup from '@/components/buttons'
 import InputField from '@/components/inputs'
 import MultiSelectDropdown from '@/components/multiSelectDropdown'
 
-const ArrayGeneratorModal = ({ isOpen, data }) => {
+const GraphGeneratorModal = ({ isOpen, data }) => {
     const initialState = {
         minValue: -100,
         maxValue: 1,
-        arraySize: 1,
-        countOfArray: 1,
+        edgesNumber: 1,
+        verticesNumber: 1,
+        countOfGraph: 1,
         error: {
             minValue: '',
             maxValue: '',
-            arraySize: '',
-            countOfArray: ''
+            edgesNumber: '',
+            verticesNumber: '',
+            countOfGraph: ''
         },
-        isSizeChecked: false,
+        isEdgeAndVertexChecked: false,
         isCountChecked: false,
         isFloatChecked: false,
-        selectedNumberOptions: [],
-        selectedArrayOptions: [],
-        selectedNumberType: []
+        selectedGraphOptions: [],
+        selectedGraphType: [],
+        selectedCharOptions: []
     }
 
     const [minValue, setMinValue] = useState(initialState.minValue)
     const [maxValue, setMaxValue] = useState(initialState.maxValue)
-    const [arraySize, setArraySize] = useState(initialState.arraySize)
-    const [countOfArray, setCountOfArray] = useState(initialState.countOfArray)
+    const [edgesNumber, setEdgesNumber] = useState(initialState.edgesNumber)
+    const [verticesNumber, setVerticesNumber] = useState(
+        initialState.verticesNumber
+    )
+    const [countOfGraph, setCountOfGraph] = useState(initialState.countOfGraph)
     const [error, setError] = useState(initialState.error)
-    const [isSizeChecked, setIsSizeChecked] = useState(
-        initialState.isSizeChecked
+    const [isEdgeAndVertexChecked, setIsEdgeAndVertexChecked] = useState(
+        initialState.isEdgeAndVertexChecked
     )
     const [isCountChecked, setIsCountChecked] = useState(
         initialState.isCountChecked
     )
-    const [selectedNumberOptions, setSelectedNumberOptions] = useState(
-        initialState.selectedNumberOptions
+    const [selectedGraphOptions, setSelectedGraphOptions] = useState(
+        initialState.selectedGraphOptions
     )
-    const [selectedArrayOptions, setSelectedArrayOptions] = useState(
-        initialState.selectedArrayOptions
+    const [selectedGraphType, setSelectedGraphType] = useState(
+        initialState.selectedGraphType
     )
-    const [selectedNumberType, setSelectedNumberType] = useState(
-        initialState.selectedNumberType
+    const [selectedCharOptions, setSelectedCharOptions] = useState(
+        initialState.selectedCharOptions
     )
 
-    const handleIsSizeChecked = () => {
-        setIsSizeChecked(!isSizeChecked)
+    const handleIsEdgeAndVertexChecked = () => {
+        setIsEdgeAndVertexChecked(!isEdgeAndVertexChecked)
     }
 
     const handleIsCountChecked = () => {
         setIsCountChecked(!isCountChecked)
     }
 
-    const handleNumberOptionsChange = selectedNumberOptions => {
-        setSelectedNumberOptions(selectedNumberOptions)
+    const handleGraphOptionsChange = selectedGraphOptions => {
+        setSelectedGraphOptions(selectedGraphOptions)
     }
-    const handleArrayOptionsChange = selectedArrayOptions => {
-        setSelectedArrayOptions(selectedArrayOptions)
+    const handleGraphTypeChange = selectedGraphType => {
+        setSelectedGraphType(selectedGraphType)
     }
-    const handleNumberTypeChange = selectedNumberType => {
-        setSelectedNumberType(selectedNumberType)
+    const handleCharOptionsChange = selectedCharOptions => {
+        setSelectedCharOptions(selectedCharOptions)
     }
 
     const handleChange = (value, setter, setErrorForValue, errorMessageFn) => {
@@ -112,28 +117,42 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
                       : ''
         )
 
-    const handleArraySizeChange = e => {
+    const handleEdgesValueChange = e =>
         handleChange(
             e.target.value.trim(),
-            setArraySize,
-            errorMessage =>
-                setError({ ...error, integersLength: errorMessage }),
+            setEdgesNumber,
+            errorMessage => setError({ ...error, edgesNumber: errorMessage }),
             value =>
                 value === ''
                     ? ''
                     : value <= 0
-                      ? 'Length must be greater than 0'
+                      ? 'Edges must be greater than 0'
                       : value > 100000
-                        ? 'Length must not exceed 100,000'
+                        ? 'Edges must not exceed 100,000'
                         : null
         )
-    }
 
-    const handleCountOfArrayChange = e =>
+    const handleVerticesValueChange = e =>
         handleChange(
             e.target.value.trim(),
-            setCountOfArray,
-            errorMessage => setError({ ...error, countOfArray: errorMessage }),
+            setVerticesNumber,
+            errorMessage =>
+                setError({ ...error, verticesNumber: errorMessage }),
+            value =>
+                value === ''
+                    ? ''
+                    : value <= 0
+                      ? 'Vertices must be greater than 0'
+                      : value > 100000
+                        ? 'Vertices must not exceed 100,000'
+                        : null
+        )
+
+    const handleCountOfGraphChange = e =>
+        handleChange(
+            e.target.value.trim(),
+            setCountOfGraph,
+            errorMessage => setError({ ...error, countOfGraph: errorMessage }),
             value =>
                 value === ''
                     ? ''
@@ -148,13 +167,14 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
     const payloadData = {
         min_value: minValue,
         max_value: maxValue,
-        array_size: arraySize,
-        array_count: countOfArray,
-        show_size: isSizeChecked,
+        edges_number: edgesNumber,
+        vertices_number: verticesNumber,
+        graph_count: countOfGraph,
+        show_edge_and_vertex: isEdgeAndVertexChecked,
         show_count: isCountChecked,
-        number_options: selectedNumberOptions,
-        array_options: selectedArrayOptions,
-        number_type: selectedNumberType,
+        graph_options: selectedGraphOptions,
+        graph_type: selectedGraphType,
+        character_options: selectedCharOptions,
         type: type
     }
 
@@ -188,14 +208,13 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
         // Implement reset functionality here for array generator
         setMinValue(initialState.minValue)
         setMaxValue(initialState.maxValue)
-        setArraySize(initialState.arraySize)
-        setCountOfArray(initialState.countOfArray)
+        setEdgesNumber(initialState.edgesNumber)
+        setCountOfGraph(initialState.countOfGraph)
         setError(initialState.error)
-        setIsSizeChecked(initialState.isSizeChecked)
+        setIsEdgeAndVertexChecked(initialState.isEdgeAndVertexChecked)
         setIsCountChecked(initialState.isCountChecked)
-        setSelectedNumberOptions(initialState.selectedNumberOptions)
-        setSelectedArrayOptions(initialState.selectedArrayOptions)
-        setSelectedNumberType(initialState.selectedNumberType)
+        setSelectedGraphOptions(initialState.selectedGraphOptions)
+        setSelectedGraphType(initialState.selectedGraphType)
     }
 
     const handleDownload = () => {
@@ -241,79 +260,103 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
         }
     ]
 
-    const numberOptions = ['Any', 'Even', 'Odd', 'Prime']
-    const arrayOptions = ['Random Size', 'Float Value', 'Distinct', 'Negative']
-    const numberType = ['Increasing', 'Decreasing', 'Random']
+    const graphOptions = [
+        'Include Arrow',
+        'Include Weight',
+        'Include Colon',
+        'Include Character'
+    ]
+    const graphType = [
+        'Weighted',
+        'Directed',
+        'Cycles',
+        'Self Loops',
+        'Multiple Edges'
+    ]
+    const charOptions = ['A-Z', 'a-z', '0-9', 'Special Characters']
+
+    let characterType = !selectedGraphOptions.includes('Include Character')
+    let size = characterType ? 5 : 4
 
     return (
         <div className='modal'>
-            <div className='grid grid-cols-1 sm:grid-cols-4 gap-4'>
+            <div className={`grid grid-cols-1 sm:grid-cols-${size} gap-4`}>
+                {!selectedGraphOptions.includes('Include Character') && (
+                    <InputField
+                        label='Min value'
+                        value={minValue}
+                        onChange={handleMinValueChange}
+                        placeholder='Minimum'
+                        error={error.minValue}
+                        isRequired={true}
+                    />
+                )}
+                {!selectedGraphOptions.includes('Include Character') && (
+                    <InputField
+                        label='Max Value'
+                        value={maxValue}
+                        onChange={handleMaxValueChange}
+                        placeholder='Maximum'
+                        error={error.maxValue}
+                        isRequired={true}
+                    />
+                )}
                 <InputField
-                    label='Min value'
-                    value={minValue}
-                    onChange={handleMinValueChange}
-                    placeholder='Minimum'
-                    error={error.minValue}
+                    label='Number of Edges'
+                    value={edgesNumber}
+                    onChange={handleEdgesValueChange}
+                    placeholder='Edges'
+                    error={error.edgesNumber}
                     isRequired={true}
                 />
                 <InputField
-                    label='Max Value'
-                    value={maxValue}
-                    onChange={handleMaxValueChange}
-                    placeholder='Maximum'
-                    error={error.maxValue}
+                    label='Number of Vertices'
+                    value={verticesNumber}
+                    onChange={handleVerticesValueChange}
+                    placeholder='Vertices'
+                    error={error.verticesNumber}
                     isRequired={true}
                 />
                 <InputField
-                    label="Array's Size"
-                    value={arraySize}
-                    onChange={handleArraySizeChange}
-                    placeholder='Size'
-                    error={error.integersLength}
-                    isRequired={true}
-                />
-                <InputField
-                    label='Count of Arrays'
-                    value={countOfArray}
-                    onChange={handleCountOfArrayChange}
+                    label='Count of Graphs'
+                    value={countOfGraph}
+                    onChange={handleCountOfGraphChange}
                     placeholder='Count'
-                    error={error.countOfArray}
+                    error={error.countOfGraph}
                     isRequired={true}
                 />
             </div>
             <div className='grid grid-cols-1 sm:grid-cols-3 gap-8'>
                 <ToggleSwitch
-                    checked={isSizeChecked}
-                    onChange={handleIsSizeChecked}
-                    rightLabel='Show Size'
-                />
-                <ToggleSwitch
                     checked={isCountChecked}
                     onChange={handleIsCountChecked}
-                    rightLabel='Show Count'
+                    rightLabel='Show Edge & Vertex'
+                />
+                <ToggleSwitch
+                    checked={isEdgeAndVertexChecked}
+                    onChange={handleIsEdgeAndVertexChecked}
+                    rightLabel='Show count'
                 />
             </div>
             <div className='grid sm:grid-cols-3 text-sm font-sm'>
                 <MultiSelectDropdown
-                    heading='Select Number Options'
-                    options={numberOptions}
-                    onChange={handleNumberOptionsChange}
-                    value={selectedNumberOptions}
-                    multiSelect={false}
+                    heading='Select Graph Options'
+                    options={graphOptions}
+                    onChange={handleGraphOptionsChange}
+                    value={selectedGraphOptions}
                 />
                 <MultiSelectDropdown
-                    heading='Select Array type'
-                    options={arrayOptions}
-                    onChange={handleArrayOptionsChange}
-                    value={selectedArrayOptions}
-                    multiSelect={false}
+                    heading='Select Graph type'
+                    options={graphType}
+                    onChange={handleGraphTypeChange}
+                    value={selectedGraphType}
                 />
                 <MultiSelectDropdown
-                    heading='Select Number type'
-                    options={numberType}
-                    onChange={handleNumberTypeChange}
-                    value={selectedNumberType}
-                    multiSelect={false}
+                    heading='Select Character type'
+                    options={charOptions}
+                    onChange={handleCharOptionsChange}
+                    value={selectedGraphOptions}
+                    disabled={characterType}
                 />
             </div>
 
@@ -324,9 +367,9 @@ const ArrayGeneratorModal = ({ isOpen, data }) => {
     )
 }
 
-ArrayGeneratorModal.propTypes = {
+GraphGeneratorModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     data: PropTypes.object.isRequired
 }
 
-export default ArrayGeneratorModal
+export default GraphGeneratorModal

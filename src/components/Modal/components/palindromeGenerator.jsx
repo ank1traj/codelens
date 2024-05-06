@@ -11,29 +11,33 @@ const PalindromeGeneratorModal = ({ isOpen, data }) => {
     const initialState = {
         minValue: -100,
         maxValue: 1,
-        arraySize: 1,
-        countOfArray: 1,
+        palindromeSize: 1,
+        countOfPalindrome: 1,
         error: {
             minValue: '',
             maxValue: '',
-            arraySize: '',
-            countOfArray: ''
+            palindromeSize: '',
+            countOfPalindrome: ''
         },
         isFloatChecked: false,
         isRandomSizeChecked: false,
         isStringChecked: false,
-        isLengthChecked: false,
+        isSizeChecked: false,
         isCountChecked: false,
         selectedCharOptions: []
     }
 
     const [minValue, setMinValue] = useState(initialState.minValue)
     const [maxValue, setMaxValue] = useState(initialState.maxValue)
-    const [arraySize, setArraySize] = useState(initialState.arraySize)
-    const [countOfArray, setCountOfArray] = useState(initialState.countOfArray)
+    const [palindromeSize, setPalindromeSize] = useState(
+        initialState.palindromeSize
+    )
+    const [countOfPalindrome, setCountOfPalindrome] = useState(
+        initialState.countOfPalindrome
+    )
     const [error, setError] = useState(initialState.error)
-    const [isLengthChecked, setIsLengthChecked] = useState(
-        initialState.isLengthChecked
+    const [isSizeChecked, setIsSizeChecked] = useState(
+        initialState.isSizeChecked
     )
     const [isCountChecked, setIsCountChecked] = useState(
         initialState.isCountChecked
@@ -42,8 +46,8 @@ const PalindromeGeneratorModal = ({ isOpen, data }) => {
         initialState.isStringChecked
     )
 
-    const handleIsLengthChecked = () => {
-        setIsLengthChecked(!isLengthChecked)
+    const handleIsSizeChecked = () => {
+        setIsSizeChecked(!isSizeChecked)
     }
 
     const handleIsCountChecked = () => {
@@ -58,7 +62,6 @@ const PalindromeGeneratorModal = ({ isOpen, data }) => {
 
     const handlePalindromeTypeChange = selectedOptions => {
         setSelectedCharOptions(selectedOptions)
-        // You can perform any additional logic here with the selected options
     }
 
     const handleChange = (value, setter, setErrorForValue, errorMessageFn) => {
@@ -73,7 +76,7 @@ const PalindromeGeneratorModal = ({ isOpen, data }) => {
                     setErrorForValue('Value cannot exceed 100,000')
                 } else {
                     const errorMessage = errorMessageFn(parsedValue)
-                    setErrorForValue(errorMessage || '') // Set error message to empty string if valid
+                    setErrorForValue(errorMessage || '')
                 }
             } else {
                 setErrorForValue('Please enter a valid integer')
@@ -107,10 +110,10 @@ const PalindromeGeneratorModal = ({ isOpen, data }) => {
                       : ''
         )
 
-    const handleArraySizeChange = e => {
+    const handlePalidnromeSizeChange = e => {
         handleChange(
             e.target.value.trim(),
-            setArraySize,
+            setPalindromeSize,
             errorMessage =>
                 setError({ ...error, integersLength: errorMessage }),
             value =>
@@ -124,11 +127,12 @@ const PalindromeGeneratorModal = ({ isOpen, data }) => {
         )
     }
 
-    const handleCountOfArrayChange = e =>
+    const handleCountOfPalindromeChange = e =>
         handleChange(
             e.target.value.trim(),
-            setCountOfArray,
-            errorMessage => setError({ ...error, countOfArray: errorMessage }),
+            setCountOfPalindrome,
+            errorMessage =>
+                setError({ ...error, countOfPalindrome: errorMessage }),
             value =>
                 value === ''
                     ? ''
@@ -143,12 +147,13 @@ const PalindromeGeneratorModal = ({ isOpen, data }) => {
     const payloadData = {
         min_value: minValue,
         max_value: maxValue,
-        desired_length: arraySize,
-        count: countOfArray,
-        show_length: isLengthChecked,
+        palindrome_size: palindromeSize,
+        palindrome_count: countOfPalindrome,
+        show_size: isSizeChecked,
         show_count: isCountChecked,
-        type: type,
-        charOptions: selectedCharOptions
+        string_or_number: isStringChecked,
+        charOptions: selectedCharOptions,
+        type: type
     }
 
     const handleGenerate = async () => {
@@ -181,10 +186,10 @@ const PalindromeGeneratorModal = ({ isOpen, data }) => {
         // Implement reset functionality here for array generator
         setMinValue(initialState.minValue)
         setMaxValue(initialState.maxValue)
-        setArraySize(initialState.arraySize)
-        setCountOfArray(initialState.countOfArray)
+        setPalindromeSize(initialState.palindromeSize)
+        setCountOfPalindrome(initialState.countOfPalindrome)
         setError(initialState.error)
-        setIsLengthChecked(initialState.isLengthChecked)
+        setIsSizeChecked(initialState.isSizeChecked)
         setIsCountChecked(initialState.isCountChecked)
         setIsStringChecked(initialState.isStringChecked)
         setSelectedCharOptions(initialState.selectedCharOptions)
@@ -260,18 +265,18 @@ const PalindromeGeneratorModal = ({ isOpen, data }) => {
                 ) : null}
                 <InputField
                     label="Palindrome's Size"
-                    value={arraySize}
-                    onChange={handleArraySizeChange}
+                    value={palindromeSize}
+                    onChange={handlePalidnromeSizeChange}
                     placeholder='Size'
                     error={error.integersLength}
                     isRequired={true}
                 />
                 <InputField
                     label='Count of Palindrome'
-                    value={countOfArray}
-                    onChange={handleCountOfArrayChange}
+                    value={countOfPalindrome}
+                    onChange={handleCountOfPalindromeChange}
                     placeholder='Count'
-                    error={error.countOfArray}
+                    error={error.countOfPalindrome}
                     isRequired={true}
                 />
             </div>
@@ -282,8 +287,8 @@ const PalindromeGeneratorModal = ({ isOpen, data }) => {
                     rightLabel='Show length'
                 />
                 <ToggleSwitch
-                    checked={isLengthChecked}
-                    onChange={handleIsLengthChecked}
+                    checked={isSizeChecked}
+                    onChange={handleIsSizeChecked}
                     rightLabel='Show count'
                 />
                 <ToggleSwitch

@@ -38,26 +38,26 @@ const TestHomePage = () => {
         {
             title: 'Linked List',
             description: 'Generate random linked list of integer values',
-            iconType: ArrowUpOnSquareIcon,
+            iconType: CheckCircleIcon,
             iconColor: 'text-green-500'
-        },
-        {
-            title: 'Binary Tree',
-            description: 'Generate random binary tree of integer values',
-            iconType: ExclamationCircleIcon,
-            iconColor: 'text-red-500'
         },
         {
             title: 'Graph',
             description: 'Generate random graph of integer/char values',
-            iconType: ForwardIcon,
-            iconColor: 'text-blue-500'
+            iconType: CheckCircleIcon,
+            iconColor: 'text-green-500'
         },
         {
             title: 'Matrix',
             description: 'Generate random Matrix of integer/char values',
             iconType: ForwardIcon,
             iconColor: 'text-blue-500'
+        },
+        {
+            title: 'Binary Tree',
+            description: 'Generate random binary tree of integer values',
+            iconType: ExclamationCircleIcon,
+            iconColor: 'text-red-500'
         }
     ]
 
