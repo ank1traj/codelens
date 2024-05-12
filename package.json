@@ -5,8 +5,8 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "GENERATE_SOURCEMAP=false vite build",
-        "postbuild":"rimraf build/static/**/*.map",
+        "build": "vite build",
+        "postbuild": "rimraf build/static/**/*.map",
         "lint": "eslint . ",
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
