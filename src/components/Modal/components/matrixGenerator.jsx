@@ -34,9 +34,14 @@ const MatrixGeneratorModal = ({ isOpen, data }) => {
             setErrorForValue('Please enter a valid integer')
         } else {
             setErrorForValue(validationFn(numericValue))
+            // Check min-max relationship after updating values
+            if (setter === setMinValue && numericValue > maxValue) {
+                setError({ ...error, minValue: 'Min value cannot be greater than max value' })
+            } else if (setter === setMaxValue && numericValue < minValue) {
+                setError({ ...error, maxValue: 'Max value cannot be less than min value' })
+            }
         }
     }
-
     const handleGenerate = async () => {
         const payload = {
             rows,
