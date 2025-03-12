@@ -6,6 +6,7 @@ import StringGeneratorModal from '@/components/Modal/components/stringGenerator.
 import PalindromeGeneratorModal from '@/components/Modal/components/palindromeGenerator.jsx'
 import LinkedlistGeneratorModal from '@/components/Modal/components/linkedlistGenerator'
 import GraphGeneratorModal from '@/components/Modal/components/graphGenerator.jsx'
+import MatrixGeneratorModal from '@/components/Modal/components/matrixGenerator.jsx' // Import the MatrixGeneratorModal
 
 const Modal = ({ isOpen, onClose, links, data }) => {
     useEffect(() => {
@@ -62,7 +63,7 @@ const Modal = ({ isOpen, onClose, links, data }) => {
                                 viewBox='0 0 18 18'
                             >
                                 <path
-                                    d='M6.707 6.707a1 1 0 0 1-1.414 0L1.293 2.121a1 1 0 1 1 1.414-1.414L6.707 5.293l4.586-4.586a1 1 0 1 1 1.414 1.414L8.121 6.707l4.586 4.586a1 1 0 1 1-1.414 1.414L6.707 8.121l4.586 4.586a1 1 0 1 1-1.414 1.414L8.121 6.707l4.586-4.586a1 1 0 1 1 1.414-1.414L6.707 5.293l-4.586-4.586a1 1 0 1 1-1.414-1.414L5.293 6.707l-4.586 4.586a1 1 0 1 1 1.414 1.414L6.707 8.121l4.586 4.586a1 1 0 1 1-1.414 1.414L8.121 6.707l4.586-4.586a1 1 0 1 1 1.414-1.414L6.707 5.293l-4.586-4.586a1 1 0 1 1-1.414-1.414L5.293 6.707l-4.586 4.586a1 1 0 1 1 1.414 1.414L6.707 8.121l4.586 4.586a1 1 0 1 1-1.414 1.414L8.121 6.707l4.586-4.586a1 1 0 1 1 1.414-1.414L6.707 5.293l-4.586-4.586a1 1 0 1 1-1.414-1.414L5.293 6.707l-4.586 4.586a1 1 0 1 1 1.414 1.414L6.707 8.121l4.586 4.586a1 1 0 1 1-1.414 1.414L8.121 6.707l4.586-4.586a1 1 0 1 1 1.414-1.414L6.707 5.293l-4.586-4.586a1 1 0 1 1-1.414-1.414L5.293 6.707l-4.586 4.586a1 1 0 1 1 1.414 1.414L6.707 8.121l4.586 4.586a1 1 0 1 1-1.414 1.414L8.121 6.707l4.586-4.586a1 1 0 1 1 1.414-1.414L6.707 5.293l-4.586 4.586a1 1 0 1 1 1.414 1.414L8.121 8.121l4.586 4.586a1 1 0 0 1-1.414 1.414L6.707 9.536l-4.586 4.586a1 1 0 0 1-1.414-1.414L5.293 8.121 0.707 3.535a1 1 0 1 1 1.414-1.414L6.707 6.707z'
+                                    d='M6.707 6.707a1 1 0 0 1-1.414 0L1.293 2.121a1 1 0 1 1 1.414-1.414L6.707 5.293l4.586-4.586a1 1 0 1 1 1.414 1.414L8.121 6.707l4.586 4.586a1 1 0 1 1-1.414 1.414L6.707 8.121l4.586 4.586a1 1 0 1 1-1.414 1.414L8.121 6.707l4.586-4.586a1 1 0 1 1 1.414-1.414L6.707 5.293l-4.586-4.586a1 1 0 1 1-1.414-1.414L5.293 6.707l-4.586 4.586a1 1 0 1 1 1.414 1.414L6.707 8.121l4.586 4.586a1 1 0 1 1-1.414 1.414L8.121 6.707l4.586-4.586a1 1 0 1 1 1.414-1.414L6.707 5.293l-4.586-4.586a1 1 0 1 1-1.414-1.414L5.293 6.707l-4.586 4.586a1 1 0 1 1 1.414 1.414L6.707 8.121l4.586 4.586a1 1 0 1 1-1.414 1.414L8.121 6.707l4.586-4.586a1 1 0 1 1 1.414-1.414L6.707 5.293l-4.586-4.586a1 1 0 1 1-1.414-1.414L5.293 6.707z'
                                     fillRule='evenodd'
                                 ></path>
                             </svg>
@@ -85,6 +86,9 @@ const Modal = ({ isOpen, onClose, links, data }) => {
                     )}
                     {title === 'Graph' && (
                         <GraphGeneratorModal isOpen={isOpen} data={data} />
+                    )}
+                    {title === 'Matrix' && ( // Add the MatrixGeneratorModal here
+                        <MatrixGeneratorModal isOpen={isOpen} data={data} />
                     )}
                 </div>
             </div>
