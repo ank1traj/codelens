@@ -193,7 +193,7 @@ const BinaryTreeGeneratorModal = ({ isOpen, onClose }) => {
     const hasErrors =
         Object.values(errors).some(error => error) ||
         Object.values(nodeErrors).some(error => error)
-    
+
     const handleCopy = () => {
         // Implement the logic to copy the generated data
     }
