@@ -6,6 +6,7 @@ import StringGeneratorModal from '@/components/Modal/components/stringGenerator.
 import PalindromeGeneratorModal from '@/components/Modal/components/palindromeGenerator.jsx'
 import LinkedlistGeneratorModal from '@/components/Modal/components/linkedlistGenerator'
 import GraphGeneratorModal from '@/components/Modal/components/graphGenerator.jsx'
+import BinaryTreeGeneratorModal from './components/binaryTreeGenerator'
 
 const Modal = ({ isOpen, onClose, links, data }) => {
     useEffect(() => {
@@ -85,6 +86,9 @@ const Modal = ({ isOpen, onClose, links, data }) => {
                     )}
                     {title === 'Graph' && (
                         <GraphGeneratorModal isOpen={isOpen} data={data} />
+                    )}
+                    {title === 'Binary Tree' && (
+                        <BinaryTreeGeneratorModal isOpen={isOpen} data={data} />
                     )}
                 </div>
             </div>
