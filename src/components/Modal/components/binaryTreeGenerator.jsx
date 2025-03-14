@@ -190,6 +190,63 @@ const BinaryTreeGeneratorModal = ({ isOpen, onClose }) => {
 
     if (!isOpen) return null
 
+    const hasErrors =
+        Object.values(errors).some(error => error) ||
+        Object.values(nodeErrors).some(error => error)
+    
+    const handleCopy = () => {
+        // Implement the logic to copy the generated data
+    }
+
+    const handleReset = () => {
+        setMinValue(initialState.minValue)
+        setMaxValue(initialState.maxValue)
+        setMaxDepth(initialState.maxDepth)
+        setNodeCount(initialState.nodeCount)
+        setIsBalanced(initialState.isBalanced)
+        setUniqueValues(initialState.uniqueValues)
+        setTreeNodes(initialState.treeNodes)
+        setErrors(initialState.errors)
+        setNodeErrors(initialState.nodeErrors)
+    }
+
+    const handleDownload = () => {
+        // Implement the logic to download the generated data
+    }
+
+    const handleSendToEmail = () => {
+        // Implement the logic to send the generated data to an email
+    }
+
+    const buttons = [
+        {
+            label: 'Generate',
+            onClick: handleGenerate,
+            disabled: hasErrors,
+            classNames: `hover:bg-blue-700 hover:text-white border-blue-600 border-2 ${hasErrors ? 'cursor-not-allowed bg-gray-300 border-gray-400 text-gray-600' : 'hover:bg-blue-700'}`
+        },
+        {
+            label: 'Copy',
+            onClick: handleCopy,
+            classNames: `hover:bg-purple-700 hover:text-white border-purple-600 border-2`
+        },
+        {
+            label: 'Reset',
+            onClick: handleReset,
+            classNames: `hover:bg-red-700 hover:text-white border-red-600 border-2`
+        },
+        {
+            label: 'Download',
+            onClick: handleDownload,
+            classNames: `hover:bg-orange-700 hover:text-white border-orange-600 border-2`
+        },
+        {
+            label: 'Send to Email',
+            onClick: handleSendToEmail,
+            classNames: `hover:bg-green-700 hover:text-white border-green-600 border-2`
+        }
+    ]
+
     return (
         <div className='modal p-4 bg-white shadow-lg rounded-lg max-w-2xl mx-auto'>
             <h2 className='text-xl font-bold mb-4'>Binary Tree Generator</h2>
@@ -311,19 +368,8 @@ const BinaryTreeGeneratorModal = ({ isOpen, onClose }) => {
                 )}
             </div>
 
-            <div className='flex justify-end gap-2'>
-                <button
-                    className='px-4 py-2 bg-gray-200 rounded hover:bg-gray-300'
-                    onClick={onClose}
-                >
-                    Cancel
-                </button>
-                <button
-                    className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700'
-                    onClick={handleGenerate}
-                >
-                    Generate
-                </button>
+            <div>
+                <ButtonGroup buttons={buttons} />
             </div>
         </div>
     )
