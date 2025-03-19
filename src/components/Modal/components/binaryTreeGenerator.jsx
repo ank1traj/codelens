@@ -249,17 +249,16 @@ const BinaryTreeGeneratorModal = ({ isOpen, onClose }) => {
 
     return (
         <div className='modal'>
-
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6'>
                 <div>
-                <InputField
-                    label='Min Node Value'
-                    type='number'
-                    value={minValue}
-                    onChange={e => setMinValue(e.target.value)}
-                    error={errors.minValue}
-                    isRequired={true}
-                />
+                    <InputField
+                        label='Min Node Value'
+                        type='number'
+                        value={minValue}
+                        onChange={e => setMinValue(e.target.value)}
+                        error={errors.minValue}
+                        isRequired={true}
+                    />
                 </div>
                 <InputField
                     label='Max Node Value'
