@@ -248,23 +248,26 @@ const BinaryTreeGeneratorModal = ({ isOpen, onClose }) => {
     ]
 
     return (
-        <div className='modal p-4 bg-white shadow-lg rounded-lg max-w-2xl mx-auto'>
-            <h2 className='text-xl font-bold mb-4'>Binary Tree Generator</h2>
+        <div className='modal'>
 
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6'>
+                <div>
                 <InputField
                     label='Min Node Value'
                     type='number'
                     value={minValue}
                     onChange={e => setMinValue(e.target.value)}
                     error={errors.minValue}
+                    isRequired={true}
                 />
+                </div>
                 <InputField
                     label='Max Node Value'
                     type='number'
                     value={maxValue}
                     onChange={e => setMaxValue(e.target.value)}
                     error={errors.maxValue}
+                    isRequired={true}
                 />
                 <InputField
                     label='Max Depth (0 = unlimited)'
@@ -274,6 +277,7 @@ const BinaryTreeGeneratorModal = ({ isOpen, onClose }) => {
                         setMaxDepth(Math.max(0, parseInt(e.target.value) || 0))
                     }
                     error={errors.maxDepth}
+                    isRequired={true}
                 />
                 <InputField
                     label='Node Count Limit (0 = unlimited)'
@@ -283,6 +287,7 @@ const BinaryTreeGeneratorModal = ({ isOpen, onClose }) => {
                         setNodeCount(Math.max(0, parseInt(e.target.value) || 0))
                     }
                     error={errors.nodeCount}
+                    isRequired={true}
                 />
 
                 <ToggleSwitch
@@ -301,7 +306,7 @@ const BinaryTreeGeneratorModal = ({ isOpen, onClose }) => {
                 <h3 className='font-semibold mb-2'>
                     Tree Structure ({treeNodes.length} nodes)
                 </h3>
-                <div className='border rounded p-4'>
+                <div>
                     <ul className='space-y-2'>
                         {treeNodes.map(node => (
                             <li
@@ -319,7 +324,7 @@ const BinaryTreeGeneratorModal = ({ isOpen, onClose }) => {
                                 </span>
                                 <input
                                     type='number'
-                                    className={`border p-1 w-24 ${
+                                    className={`border p-1 w-24 rounded-md ${
                                         Number(node.value) < minValue ||
                                         Number(node.value) > maxValue ||
                                         nodeErrors[node.id]
