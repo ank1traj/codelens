@@ -306,7 +306,7 @@ const BinaryTreeGeneratorModal = ({ isOpen, onClose }) => {
                     Tree Structure ({treeNodes.length} nodes)
                 </h3>
                 <div>
-                    <ul className='space-y-2'>
+                    <ul className='space-y-2 max-h-60 overflow-scroll overflow-x-hidden'>
                         {treeNodes.map(node => (
                             <li
                                 key={node.id}
