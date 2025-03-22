@@ -22,7 +22,9 @@ const MatrixGeneratorModal = ({ isOpen, data }) => {
         isFloatChecked: false,
         selectedNumberOptions: [],
         selectedMatrixOptions: [],
-        selectedNumberType: []
+        selectedNumberType: [],
+        includeNegativeValues: true,
+        distributionType: 'uniform'
     }
 
     const [minValue, setMinValue] = useState(initialState.minValue)
@@ -42,9 +44,23 @@ const MatrixGeneratorModal = ({ isOpen, data }) => {
     const [selectedNumberType, setSelectedNumberType] = useState(
         initialState.selectedNumberType
     )
+    const [includeNegativeValues, setIncludeNegativeValues] = useState(
+        initialState.includeNegativeValues
+    )
+    const [distributionType, setDistributionType] = useState(
+        initialState.distributionType
+    )
 
     const handleIsFloatChecked = () => {
         setIsFloatChecked(!isFloatChecked)
+    }
+
+    const handleIncludeNegativeValuesChange = () => {
+        setIncludeNegativeValues(!includeNegativeValues)
+    }
+
+    const handleDistributionTypeChange = selectedDistributionType => {
+        setDistributionType(selectedDistributionType)
     }
 
     const handleNumberOptionsChange = selectedNumberOptions => {
@@ -134,20 +150,22 @@ const MatrixGeneratorModal = ({ isOpen, data }) => {
                         : null
         )
 
-    const type = data.title
-    const payloadData = {
-        min_value: minValue,
-        max_value: maxValue,
-        rows: rows,
-        columns: columns,
-        float_values: isFloatChecked,
-        number_options: selectedNumberOptions,
-        matrix_options: selectedMatrixOptions,
-        number_type: selectedNumberType,
-        type: type
-    }
-
     const handleGenerate = async () => {
+        const type = data.title
+        const payloadData = {
+            min_value: minValue,
+            max_value: maxValue,
+            rows: rows,
+            columns: columns,
+            float_values: isFloatChecked,
+            number_options: selectedNumberOptions,
+            matrix_options: selectedMatrixOptions,
+            number_type: selectedNumberType,
+            include_negative_values: includeNegativeValues,
+            distribution_type: distributionType,
+            type: type
+        }
+
         const setGeneratedData = data => {
             // Implement the logic to set the generated data
             console.log('Setting generated data:', data)
@@ -184,6 +202,8 @@ const MatrixGeneratorModal = ({ isOpen, data }) => {
         setSelectedNumberOptions(initialState.selectedNumberOptions)
         setSelectedMatrixOptions(initialState.selectedMatrixOptions)
         setSelectedNumberType(initialState.selectedNumberType)
+        setIncludeNegativeValues(initialState.includeNegativeValues)
+        setDistributionType(initialState.distributionType)
     }
 
     const handleDownload = () => {
@@ -231,6 +251,8 @@ const MatrixGeneratorModal = ({ isOpen, data }) => {
 
     const numberOptions = ['Any', 'Even', 'Odd', 'Prime']
     const numberType = ['Increasing', 'Decreasing', 'Random']
+    const distributionOptions = ['Uniform', 'Normal', 'Poisson', 'Exponential']
+    const matrixOptions = ['Identity', 'Symmetric', 'Diagonal', 'Random']
 
     return (
         <div className='modal'>
@@ -268,14 +290,19 @@ const MatrixGeneratorModal = ({ isOpen, data }) => {
                     isRequired={true}
                 />
             </div>
-            <div className='grid grid-cols-1 sm:grid-cols-3 gap-8'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-8'>
                 <ToggleSwitch
                     checked={isFloatChecked}
                     onChange={handleIsFloatChecked}
                     rightLabel='Float Values'
                 />
+                <ToggleSwitch
+                    checked={includeNegativeValues}
+                    onChange={handleIncludeNegativeValuesChange}
+                    rightLabel='Include Negative Values'
+                />
             </div>
-            <div className='grid sm:grid-cols-3 text-sm font-sm'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
                 <MultiSelectDropdown
                     heading='Select Number Options'
                     options={numberOptions}
@@ -284,10 +311,24 @@ const MatrixGeneratorModal = ({ isOpen, data }) => {
                     multiSelect={false}
                 />
                 <MultiSelectDropdown
-                    heading='Select Number type'
+                    heading='Select Number Type'
                     options={numberType}
                     onChange={handleNumberTypeChange}
                     value={selectedNumberType}
+                    multiSelect={false}
+                />
+                <MultiSelectDropdown
+                    heading='Select Distribution Type'
+                    options={distributionOptions}
+                    onChange={handleDistributionTypeChange}
+                    value={distributionType}
+                    multiSelect={false}
+                />
+                <MultiSelectDropdown
+                    heading='Select Matrix Options'
+                    options={matrixOptions}
+                    onChange={handleMatrixOptionsChange}
+                    value={selectedMatrixOptions}
                     multiSelect={false}
                 />
             </div>
