@@ -112,35 +112,37 @@ const BinaryTreeGeneratorModal = ({ isOpen, onClose }) => {
             // Helper function to recursively find and remove children
             const removeChildren = (nodeId, nodes) => {
                 // Remove the node itself
-                let updatedNodes = nodes.filter(node => node.id !== nodeId);
-    
+                let updatedNodes = nodes.filter(node => node.id !== nodeId)
+
                 // Find the node to check if it has children
-                const nodeToCheck = nodes.find(node => node.id === nodeId);
-    
+                const nodeToCheck = nodes.find(node => node.id === nodeId)
+
                 if (nodeToCheck && nodeToCheck.children.length > 0) {
                     // Recursively remove all child nodes
                     nodeToCheck.children.forEach(childId => {
-                        updatedNodes = removeChildren(childId, updatedNodes);
-                    });
+                        updatedNodes = removeChildren(childId, updatedNodes)
+                    })
                 }
-    
-                return updatedNodes;
-            };
-    
+
+                return updatedNodes
+            }
+
             // Remove the node and all its children recursively
             return removeChildren(nodeId, prevNodes).map(node => {
                 // Update the parent node to remove this node from its children
                 if (node.parentId) {
                     return {
                         ...node,
-                        children: node.children.filter(childId => childId !== nodeId)
-                    };
+                        children: node.children.filter(
+                            childId => childId !== nodeId
+                        )
+                    }
                 }
-                return node;
-            });
-        });
-    };
-    
+                return node
+            })
+        })
+    }
+
     const handleNodeValueChange = (nodeId, value) => {
         setTreeNodes(prevNodes =>
             prevNodes.map(node =>
@@ -395,7 +397,10 @@ const BinaryTreeGeneratorModal = ({ isOpen, onClose }) => {
                                     </button>
                                 )}
                                 {node.children.length == 2 && (
-                                    <button className='px-2 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 disabled:opacity-50' disabled>
+                                    <button
+                                        className='px-2 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 disabled:opacity-50'
+                                        disabled
+                                    >
                                         Node Full
                                     </button>
                                 )}
