@@ -110,48 +110,49 @@ const BinaryTreeGeneratorModal = ({ isOpen, onClose }) => {
     const handleRemoveChildNode = nodeId => {
         setTreeNodes(prevNodes => {
             // Find the parent of the node to be removed
-            const parentNode = prevNodes.find(node => 
+            const parentNode = prevNodes.find(node =>
                 node.children.includes(nodeId)
-            );
-    
+            )
+
             // Helper function to recursively find and remove children
             const removeChildren = (nodeId, nodes) => {
                 // Remove the node itself
-                let updatedNodes = nodes.filter(node => node.id !== nodeId);
-    
+                let updatedNodes = nodes.filter(node => node.id !== nodeId)
+
                 // Find the node to check if it has children
-                const nodeToCheck = nodes.find(node => node.id === nodeId);
-    
+                const nodeToCheck = nodes.find(node => node.id === nodeId)
+
                 if (nodeToCheck && nodeToCheck.children.length > 0) {
                     // Recursively remove all child nodes
                     nodeToCheck.children.forEach(childId => {
-                        updatedNodes = removeChildren(childId, updatedNodes);
-                    });
+                        updatedNodes = removeChildren(childId, updatedNodes)
+                    })
                 }
-    
-                return updatedNodes;
-            };
-    
+
+                return updatedNodes
+            }
+
             // Remove the node and all its children recursively
-            let updatedNodes = removeChildren(nodeId, prevNodes);
-    
+            let updatedNodes = removeChildren(nodeId, prevNodes)
+
             // Update the parent node's children array
             if (parentNode) {
                 updatedNodes = updatedNodes.map(node => {
                     if (node.id === parentNode.id) {
                         return {
                             ...node,
-                            children: node.children.filter(childId => childId !== nodeId)
-                        };
+                            children: node.children.filter(
+                                childId => childId !== nodeId
+                            )
+                        }
                     }
-                    return node;
-                });
+                    return node
+                })
             }
-    
-            return updatedNodes;
-        });
-    };
-    
+
+            return updatedNodes
+        })
+    }
 
     const handleNodeValueChange = (nodeId, value) => {
         setTreeNodes(prevNodes =>
