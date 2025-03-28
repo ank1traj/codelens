@@ -90,6 +90,7 @@ const Modal = ({ isOpen, onClose, links, data }) => {
                     )}
                     {title === 'Binary Tree' && (
                         <BinaryTreeGeneratorModal isOpen={isOpen} data={data} />
+                    )}
                     {title === 'Matrix' && ( // Add the MatrixGeneratorModal here
                         <MatrixGeneratorModal isOpen={isOpen} data={data} />
                     )}
